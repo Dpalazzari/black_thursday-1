@@ -40,6 +40,20 @@ class InvoiceTest < Minitest::Test
 
   def test_it_outputs_the_time_for_updated_at
     assert_equal "2014-03-15 00:00:00 -0600", invoice.updated_at.to_s
+    assert_equal Time, invoice.updated_at.class
   end
 
+  def test_invoice_can_ask_for_merchant
+    parent = Minitest::Mock.new
+    invoice = Invoice.new({:id => "1",
+                      :customer_id => "2",
+                      :merchant_id => "12335938",
+                      :status => "pending",
+                      :created_at => "2009-02-07",
+                      :updated_at => "2014-03-15"
+                      }, parent)
+    parent.expect(:find_merchant, nil, [invoice.merchant_id])
+    invoice.merchant
+    assert parent.verify
+  end
 end

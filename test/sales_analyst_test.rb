@@ -11,6 +11,7 @@ class SalesAnalystTest < Minitest::Test
     @se = SalesEngine.from_csv({
   :items     => "./fixture/items_fixture_3.csv",
   :merchants => "./fixture/merchants_fixture_3.csv",
+  :invoices  => "./data/invoices_fixtures.csv"
   })
   @sa = SalesAnalyst.new(@se)
   end

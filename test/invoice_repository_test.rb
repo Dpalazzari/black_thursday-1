@@ -1,12 +1,17 @@
 require_relative '../test/test_helper'
 require_relative '../lib/invoice_repository'
+require_relative '../lib/sales_engine'
 
 class InvoiceRepositoryTest < Minitest::Test
 
-  attr_reader :invoice
+  attr_reader :invoices
 
   def setup
-    @invoices = InvoiceRepository.new("data/invoices_fixtures.csv")
+    se = SalesEngine.from_csv({
+              :items     => 'data/item_fixture.csv',
+              :merchants => 'data/merchants_fixture.csv',
+              :invoices  => 'data/invoices_fixtures.csv'})
+    @invoices = se.invoices
   end
 
   def test_it_exists
@@ -60,4 +65,11 @@ class InvoiceRepositoryTest < Minitest::Test
     assert_equal 2, result.count
   end
 
+  def test_invoice_can_ask_for_merchant
+    parent = Minitest::Mock.new
+    invoices = InvoiceRepository.new('data/invoices_fixtures.csv', parent)
+    parent.expect(:find_merchant_by_id, nil, [12335938])
+    invoices.find_merchant(12335938)
+    assert parent.verify
+  end
 end

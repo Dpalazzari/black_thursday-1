@@ -1,7 +1,6 @@
 require_relative '../test/test_helper'
 require_relative '../lib/merchant.rb'
 require_relative '../lib/item'
-require 'minitest/mock'
 
 
 class MerchantTest < Minitest::Test

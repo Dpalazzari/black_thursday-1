@@ -16,6 +16,10 @@ class MerchantTest < Minitest::Test
     assert merchant
   end
 
+  def test_it_what_the_class_is
+    assert_equal Merchant, merchant.class
+  end
+
   def test_it_has_id
     assert merchant.id
     assert_equal 5, merchant.id
@@ -33,9 +37,10 @@ class MerchantTest < Minitest::Test
   def test_merchant_can_ask_mr_for_items
     skip
     parent = Minitest::Mock.new
-    parent.expect(:find_items_by_merchant_id, (12334347) => ["item1", "item2"])
-    merch = Merchant.new({:id => "12334347"}, parent)
-    merch.items({:id => "12334347"})
+    merchant = Merchant.new(hash[:id], parent)
+    parent.expect(:find_all_by_merchant_id, nil, [1])
+    # binding.pry
+    merchant.items
     assert parent.verify
   end
 

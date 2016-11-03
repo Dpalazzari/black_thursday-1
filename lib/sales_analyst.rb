@@ -24,8 +24,8 @@ class SalesAnalyst
   end
 
   def find_standard_deviation(array)
-    mean = average(array)
-    n = array.length
+    mean        = average(array)
+    n           = array.length
     sum_squares = array.inject(0) { |sum, element| sum + (mean - element)**2 }
     Math.sqrt(sum_squares / (n-1))
   end
@@ -52,8 +52,6 @@ class SalesAnalyst
     array = @merchants.find_all do |merchant|
         merchant.items.count > threshold
       end
-      # name = array.map { |merchant| merchant.name }
-      # ^if spec harness breaks delete this line^
   end
 
   def average_item_price_for_merchant(id)
@@ -66,7 +64,6 @@ class SalesAnalyst
     prices = @items.keys.map do |id|
       average_item_price_for_merchant(id)
     end
-    # binding.pry
     average_price = average(prices)
     return BigDecimal.new(average_price, 6).floor(2)
   end

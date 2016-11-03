@@ -3,12 +3,14 @@ require 'pry'
 class SalesAnalyst
   attr_reader :sales_engine,
               :items,
-              :merchants
+              :merchants,
+              :invoices
 
   def initialize(sales_engine)
     @sales_engine = sales_engine
     @items = load_items
     @merchants = load_merchants
+    @invoices = load_invoices
   end
 
   def load_items
@@ -17,6 +19,10 @@ class SalesAnalyst
 
   def load_merchants
     sales_engine.merchants.all
+  end
+
+  def load_invoices
+    sales_engine.load_invoices
   end
 
   def average(array)
@@ -51,7 +57,7 @@ class SalesAnalyst
   def merchants_with_high_item_count
     std_dev = average_items_per_merchant_standard_deviation
     threshold = std_dev + average_items_per_merchant
-    array = @merchants.find_all do |merchant|
+    @merchants.find_all do |merchant|
         merchant.items.count > threshold
       end
   end
@@ -101,11 +107,12 @@ class SalesAnalyst
   ### --- invoice methods --- ###
 
   def average_invoices_per_merchant
-    # result should look like => 8.5
-    # get invoices as array
+    merchant_count = @merchants.all.count
+    invoice_count  = @invoices.all.count
+    invoice_count/merchant_count
   end
 
-  def average_invoices_per_merchant
+  def average_invoices_per_merchant_standard_deviation
     # result should look like => 1.2
   end
 

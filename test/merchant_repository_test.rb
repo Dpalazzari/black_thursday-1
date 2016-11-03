@@ -9,12 +9,18 @@ class MerchantRepositoryTest < Minitest::Test
   def setup
     se = SalesEngine.from_csv({
               :items     => 'data/item_fixture.csv',
-              :merchants => 'data/merchants_fixture.csv',})
+              :merchants => 'data/merchants_fixture.csv',
+              :invoices  => 'data/invoices_fixtures.csv'})
     @merchant_repository = se.merchants
   end
 
   def test_it_exists
     assert merchant_repository
+  end
+
+  def test_parent_is_sales_engine
+    result = @merchant_repository.parent
+    assert_equal SalesEngine, result.class
   end
 
   def test_csv_loader_loads_files
@@ -57,5 +63,13 @@ class MerchantRepositoryTest < Minitest::Test
     result = merchant_repository.find_all_by_name("Shopin")
     assert_equal "Shopin1901", result.first.name
     assert_equal "Shopin1902", result.last.name
+  end
+
+  def test_merchant_can_ask_mr_for_items
+    parent = Minitest::Mock.new
+    merchants = MerchantRepository.new('data/merchants_fixture.csv', parent)
+    parent.expect(:find_all_by_merchant_id, nil, [12335938])
+    merchants.find_all_by_merchant_id(12335938)
+    assert parent.verify
   end
 end

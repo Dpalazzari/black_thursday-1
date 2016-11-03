@@ -30,6 +30,8 @@ class SalesAnalyst
     Math.sqrt(sum_squares / (n-1))
   end
 
+  ### --- merchant methods --- ###
+
   def average_items_per_merchant
     items_count      = sales_engine.items.all.count
     merchants_count  = sales_engine.merchants.all.count
@@ -68,6 +70,8 @@ class SalesAnalyst
     return BigDecimal.new(average_price, 6).floor(2)
   end
 
+  ### --- item methods --- ###
+
   def get_item_average_price
     item_prices = []
     item_prices = sales_engine.items.all.map do |item|
@@ -92,6 +96,36 @@ class SalesAnalyst
         item.unit_price > threshold * 2
       end
       golden_items
+  end
 
+  ### --- invoice methods --- ###
+
+  def average_invoices_per_merchant
+    # result should look like => 8.5
+    # get invoices as array
+    
+  end
+
+  def average_invoices_per_merchant
+    # result should look like => 1.2
+  end
+
+  def top_merchants_by_invoice_count
+    # Which merchants are more than 2 standard devs above mean?
+    # result should look like [merchant, merchant, merchant]
+  end
+
+  def bottom_merchants_by_invoice_count
+    # Which merchants are more than 2 standard devs below mean?
+    # result should look like [merchant, merchant, merchant]
+  end
+
+  def top_days_by_invoice_count
+    # result should look like ["Sunday", "Saturday"]
+  end
+
+  def invoice_status(status)
+    # returns percentage of invoices with status (as a symbol)
+    # result should look like 5.25
   end
 end

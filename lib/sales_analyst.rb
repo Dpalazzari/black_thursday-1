@@ -31,9 +31,8 @@ class SalesAnalyst
 
   def find_standard_deviation(array)
     mean        = average(array)
-    n           = array.length
     sum_squares = array.inject(0) { |sum, element| sum + (mean - element)**2 }
-    Math.sqrt(sum_squares / (n-1))
+    Math.sqrt(sum_squares / (array.length - 1))
   end
 
   ### --- merchant methods --- ###

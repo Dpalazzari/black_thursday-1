@@ -42,4 +42,8 @@ class InvoiceRepository
   def find_merchant(id)
     @parent.find_merchant_by_id(id)
   end
+
+  def inspect
+    "#<#{self.class} #{@all.size} rows>"  
+  end
 end

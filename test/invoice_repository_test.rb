@@ -5,7 +5,6 @@ require_relative '../lib/sales_engine'
 class InvoiceRepositoryTest < Minitest::Test
 
   attr_reader :invoices
-
   def setup
     se = SalesEngine.from_csv({
               :items     => 'data/item_fixture.csv',

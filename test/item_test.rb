@@ -91,4 +91,19 @@ class ItemTest < Minitest::Test
     result = item_empty.unit_price
     assert_equal 0.0, item_empty.unit_price_to_dollars(result)
   end
+
+  def test_item_can_ask_for_merchant
+    parent = Minitest::Mock.new
+    item = Item.new({:id => "4",
+                      :name => "Thing",
+                      :description => "description of the thing",
+                      :unit_price => "1200",
+                      :merchant_id => "01",
+                      :created_at => "2016-01-11 18:30:35 UTC",
+                      :updated_at => "2016-01-11 18:30:35 UTC"
+                      }, parent)
+    parent.expect(:find_merchant, nil, [item.merchant_id])
+    item.merchant
+    assert parent.verify
+  end
 end

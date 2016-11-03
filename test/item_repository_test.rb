@@ -117,4 +117,12 @@ class ItemRepositoryTest < Minitest::Test
     assert_equal "Custom Hand Made Miniature Bicycle", output.first.name
     assert_equal 150.0, output.first.unit_price
   end
+
+  def test_item_can_ask_for_merchant
+    parent = Minitest::Mock.new
+    items = ItemRepository.new('data/item_fixture.csv', parent)
+    parent.expect(:find_merchant_by_id, nil, [12335938])
+    items.find_merchant(12335938)
+    assert parent.verify
+  end
 end

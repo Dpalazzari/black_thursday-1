@@ -6,9 +6,10 @@ class InvoiceRepository
   attr_reader :csv, :all
 
   def initialize(path, sales_engine = nil)
+    @parent = sales_engine
+    @all = []
     csv_path(path)
     load_all
-    @parent = sales_engine
   end
 
   def csv_path(path)
@@ -16,8 +17,7 @@ class InvoiceRepository
   end
 
   def load_all
-    @all = []
-    @csv.each do |line|
+    csv.each do |line|
       @all << Invoice.new({ :id => line[:id],
                             :customer_id => line[:customer_id],
                             :merchant_id => line[:merchant_id],
@@ -26,18 +26,18 @@ class InvoiceRepository
                             :updated_at => line[:updated_at]
                             }, self)
     end
-    return @all
+    all
   end
 
   def find_by_id(id)
     return nil if id.nil?
-    matches = @all.find { |invoice| invoice.id == id }
+    matches = all.find { |invoice| invoice.id == id }
   end
 
   def find_all_by_customer_id(id)
     return nil if id.nil?
     matches = []
-    matches = @all.find_all do |invoice|
+    matches = all.find_all do |invoice|
       invoice.customer_id == id
     end
     matches
@@ -46,7 +46,7 @@ class InvoiceRepository
   def find_all_by_merchant_id(id)
     return nil if id.nil?
     matches = []
-    matches = @all.find_all do |invoice|
+    matches = all.find_all do |invoice|
       invoice.merchant_id == id
     end
     matches
@@ -55,7 +55,7 @@ class InvoiceRepository
   def find_all_by_status(status)
     return nil if status.nil?
     matches = []
-    matches = @all.find_all do |invoice|
+    matches = all.find_all do |invoice|
       invoice.status == status
     end
     matches

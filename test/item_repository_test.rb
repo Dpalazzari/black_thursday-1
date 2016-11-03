@@ -75,18 +75,6 @@ class ItemRepositoryTest < Minitest::Test
     assert_equal Item, output.class
   end
 
-  def test_find_by_id_returns_nil_with_no_input
-    item_repository.all
-    output = item_repository.find_by_id(nil)
-    assert_equal nil, output
-  end
-
-  def test_find_by_name_returns_proper_phrase_with_nil_input
-    item_repository.all
-    output = item_repository.find_by_name(nil)
-    assert_equal "A cool spindle", output
-  end
-
   def test_find_by_name_works_with_proper_format
     item_repository.all
     output = item_repository.find_by_name("CustoM Hand MadE MiniaTure BicyCle")

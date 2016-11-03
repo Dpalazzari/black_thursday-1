@@ -35,11 +35,9 @@ class MerchantTest < Minitest::Test
   end
 
   def test_merchant_can_ask_mr_for_items
-    skip
     parent = Minitest::Mock.new
-    merchant = Merchant.new(hash[:id], parent)
-    parent.expect(:find_all_by_merchant_id, nil, [1])
-    # binding.pry
+    merchant = Merchant.new({:id => 5, :name => "Turing School"}, parent)
+    parent.expect(:find_all_by_merchant_id, nil, [merchant.id])
     merchant.items
     assert parent.verify
   end

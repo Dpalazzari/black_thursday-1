@@ -52,11 +52,6 @@ class MerchantRepositoryTest < Minitest::Test
     assert_equal Merchant, result.class
   end
 
-  def test_find_all_by_name_nil_case
-    result = merchant_repository.find_all_by_name(nil)
-    assert_equal "Steve the Pirate", result
-  end
-
   def test_find_all_by_name_returns_array_of_names
     merchant_repository.all
     result = merchant_repository.find_all_by_name("Shopin")

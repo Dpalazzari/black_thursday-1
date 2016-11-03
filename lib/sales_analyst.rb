@@ -103,7 +103,6 @@ class SalesAnalyst
   def average_invoices_per_merchant
     # result should look like => 8.5
     # get invoices as array
-    
   end
 
   def average_invoices_per_merchant

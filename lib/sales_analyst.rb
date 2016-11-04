@@ -159,10 +159,14 @@ class SalesAnalyst
       z << day[1] if day[0][1] > threshold
     end
     z
-    # binding.pry
   end
 
   def invoice_status(status)
+    matches = sales_engine.invoices.all.find_all do |invoice_instance|
+      invoice_instance.status == status
+    end
+    x = (matches.count / sales_engine.invoices.all.count.to_f)
+    (x * 100).round(2)
     # returns percentage of invoices with status (as a symbol)
     # result should look like 5.25
   end

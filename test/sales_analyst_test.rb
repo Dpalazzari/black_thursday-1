@@ -96,7 +96,13 @@ class SalesAnalystTest < Minitest::Test
 
   def test_it_can_tell_us_the_day_of_the_week_from_date
     result = sa.top_days_by_invoice_count
-    assert_equal ["Saturday", "Friday"], result
+    assert_equal ["Saturday"], result
+  end
+
+  def test_invoice_status_matches_status
+    result = sa.invoice_status(:pending)
+    assert_equal Float, result.class
+    assert_equal 31.0, result
   end
 
 end

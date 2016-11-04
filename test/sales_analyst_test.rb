@@ -41,7 +41,7 @@ class SalesAnalystTest < Minitest::Test
 
   def test_average_items_per_merchant
     result = sa.average_items_per_merchant
-    assert_equal 1.21, result
+    assert_equal 0.07, result
   end
 
   def test_standard_deviation_gives_standard_dev
@@ -52,13 +52,13 @@ class SalesAnalystTest < Minitest::Test
 
   def test_average_items_per_merchant_std_dev
     result = sa.average_items_per_merchant_standard_deviation
-    assert_equal 0.37, result
+    assert_equal 0.3, result
     assert_equal Float, result.class
   end
 
   def test_it_finds_merchants_with_high_item_counts
     result = sa.merchants_with_high_item_count
-    assert_equal "BloominScents", result.first.name
+    assert_equal "Shopin1901", result.first.name
   end
 
   def test_average_item_price_for_merchant_returns_price
@@ -75,6 +75,28 @@ class SalesAnalystTest < Minitest::Test
   def test_golden_items_returns_array
     result = sa.golden_items
     assert_equal Array, result.class
+  end
+
+  def test_it_finds_average_invoices_per_merchant
+    result = sa.average_invoices_per_merchant
+    assert_equal 2.1, result
+    assert_equal Float, result.class
+  end
+
+  def test_it_can_find_the_top_merchants_by_invoice_count
+    result = sa.top_merchants_by_invoice_count
+    assert_equal Array, result.class
+    assert_equal 32, result.count
+  end
+
+  def test_it_can_find_the_bottom_merchants_by_invoice_count
+    result = sa.top_merchants_by_invoice_count
+    assert_equal 32, result.count
+  end
+
+  def test_it_can_tell_us_the_day_of_the_week_from_date
+    result = sa.top_days_by_invoice_count
+    assert_equal ["Saturday", "Friday"], result
   end
 
 end

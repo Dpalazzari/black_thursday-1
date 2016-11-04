@@ -67,7 +67,6 @@ class SalesAnalyst
   end
 
   def average_average_price_per_merchant
-    # need to find another way to get array of merchant ids
     prices = @items.keys.map do |id|
       average_item_price_for_merchant(id)
     end
@@ -106,27 +105,61 @@ class SalesAnalyst
   ### --- invoice methods --- ###
 
   def average_invoices_per_merchant
-    merchant_count = @merchants.all.count
-    invoice_count  = @invoices.all.count
-    invoice_count/merchant_count
+    merchant_count = @merchants.count
+    invoice_count  = @sales_engine.invoices.all.count
+    (invoice_count.to_f/merchant_count.to_f).round(2)
   end
 
   def average_invoices_per_merchant_standard_deviation
-    # result should look like => 1.2
+    invoices_per_merchant = []
+    @merchants.each do |merchant_instance|
+      invoices_per_merchant << merchant_instance.invoices.count
+    end
+    result = find_standard_deviation(invoices_per_merchant)
+    result.round(2)
   end
 
   def top_merchants_by_invoice_count
-    # Which merchants are more than 2 standard devs above mean?
-    # result should look like [merchant, merchant, merchant]
+    std_dev = average_invoices_per_merchant_standard_deviation
+    threshold = (std_dev * 2) + average_invoices_per_merchant
+    @merchants.find_all do |merchant|
+        merchant.invoices.count > threshold
+      end
   end
 
   def bottom_merchants_by_invoice_count
-    # Which merchants are more than 2 standard devs below mean?
-    # result should look like [merchant, merchant, merchant]
+    std_dev = average_invoices_per_merchant_standard_deviation
+    threshold = average_invoices_per_merchant - (std_dev * 2)
+    @merchants.find_all do |merchant|
+        merchant.invoices.count < threshold
+      end
   end
 
   def top_days_by_invoice_count
     # result should look like ["Sunday", "Saturday"]
+    dummy = sales_engine.invoices.all.group_by do |invoice_instance|
+      invoice_instance.created_at.wday
+    end
+    day_numbers = dummy.keys
+    days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    values = dummy.keys.map do |key|
+      dummy[key].count
+    end
+    new_array = day_numbers.zip(values)
+    newer_array = new_array.sort.zip(days)
+    y = newer_array.sort_by do |x|
+      x[0][1]
+    end.reverse!
+    [y[0][1], y[1][1]]
+    std_dev = find_standard_deviation(values)
+    avg = average(values)
+    threshold = (std_dev) + avg
+    z = []
+    y.each do |day|
+      z << day[1] if day[0][1] > threshold
+    end
+    z
+    # binding.pry
   end
 
   def invoice_status(status)

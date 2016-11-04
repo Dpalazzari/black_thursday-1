@@ -37,7 +37,7 @@ class InvoiceRepositoryTest < Minitest::Test
     result = @invoices.find_all_by_customer_id(10)
     assert_equal Array, result.class
     assert_equal 10, result[0].customer_id
-    assert_equal 2, result.length
+    assert_equal 8, result.length
   end
 
   def test_it_has_merchant_id_returns_empty_hash_if_empty
@@ -49,7 +49,7 @@ class InvoiceRepositoryTest < Minitest::Test
     result = @invoices.find_all_by_merchant_id(12335938)
     assert_equal Array, result.class
     assert_equal 12335938, result[0].merchant_id
-    assert_equal 2, result.length
+    assert_equal 4, result.length
   end
 
   def test_find_all_by_status_gives_empty_array_if_empty
@@ -61,7 +61,7 @@ class InvoiceRepositoryTest < Minitest::Test
   def test_find_all_by_status_gives_correct_invoices
     result = @invoices.find_all_by_status(:pending)
     assert_equal Array, result.class
-    assert_equal 2, result.count
+    assert_equal 310, result.count
   end
 
   def test_invoice_can_ask_for_merchant

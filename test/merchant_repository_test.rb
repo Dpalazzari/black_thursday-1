@@ -65,11 +65,19 @@ class MerchantRepositoryTest < Minitest::Test
     assert_equal "Shopin1902", result.last.name
   end
 
-  def test_merchant_can_ask_mr_for_items
+  def test_merchant_can_ask_se_for_items
     parent = Minitest::Mock.new
     merchants = MerchantRepository.new('data/merchants_fixture.csv', parent)
-    parent.expect(:find_all_by_merchant_id, nil, [12335938])
-    merchants.find_all_by_merchant_id(12335938)
+    parent.expect(:find_all_items_by_merchant_id, nil, [12335938])
+    merchants.find_all_items_by_merchant_id(12335938)
+    assert parent.verify
+  end
+
+  def test_it_can_ask_se_for_invoices
+    parent = Minitest::Mock.new
+    merchants = MerchantRepository.new('data/merchants_fixture.csv', parent)
+    parent.expect(:find_all_invoices_by_merchant_id, nil, [12335938])
+    merchants.find_all_invoices_by_merchant_id(12335938)
     assert parent.verify
   end
 end

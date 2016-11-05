@@ -7,10 +7,10 @@ class InvoiceItemRepositoryTest < Minitest::Test
               :invoice_items
 
   def setup
-    @se = SalesEngine.from_csv({
-              :items         => 'fixture/item_fixture_2.csv',
-              :merchants     => 'data/merchants_fixture.csv',
-              :invoices      => 'data/invoices_fixtures.csv',
+    se = SalesEngine.from_csv({
+              :items         => 'fixture/items_fixture_3.csv',
+              :merchants     => 'fixture/merchants_fixture.csv',
+              :invoices      => 'fixture/invoices_fixtures.csv',
               :invoice_items => 'fixture/invoice_item_fixture.csv',
               :transactions  => 'fixture/transaction_fixture.csv',
               :customers     => 'data/customers.csv'})
@@ -18,36 +18,32 @@ class InvoiceItemRepositoryTest < Minitest::Test
   end
 
   def test_it_exists
-    assert @invoice_items
+    assert invoice_items
   end
 
   def test_find_by_id_returns_nil_when_no_invoice
-    result = @invoice_items.find_by_id(1000)
+    result = invoice_items.find_by_id(1000)
     assert_equal nil, result
   end
 
   def test_find_by_id_returns_correct_invoice
-    result = @invoice_items.find_by_id(1)
+    result = invoice_items.find_by_id(1)
     assert_equal InvoiceItem, result.class
     assert_equal 1, result.id
   end
 
   def test_find_all_by_item_id_returns_invoice_item
-    result = @invoice_items.find_all_by_item_id(263454779)
+    result = invoice_items.find_all_by_item_id(263454779)
     assert_equal Array, result.class
     assert_equal InvoiceItem, result[0].class
     assert_equal 263454779, result.first.item_id
   end
 
   def test_find_all_by_invoice_id_returns_invoice_item
-    result = @invoice_items.find_all_by_invoice_id(2)
+    result = invoice_items.find_all_by_invoice_id(2)
     assert_equal Array, result.class
     assert_equal InvoiceItem, result[0].class
     assert_equal 263529264, result.first.item_id
-  end
-
-  def test_find_all_by_invoice_id_can_return_multiple_invoices
-
   end
 
   # def test_invoice_can_ask_for_merchant

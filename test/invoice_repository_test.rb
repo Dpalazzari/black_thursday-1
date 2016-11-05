@@ -7,12 +7,12 @@ class InvoiceRepositoryTest < Minitest::Test
   attr_reader :invoices
   def setup
     se = SalesEngine.from_csv({
-              :items     => 'data/item_fixture.csv',
-              :merchants => 'data/merchants_fixture.csv',
-              :invoices  => 'data/invoices_fixtures.csv',
-              :invoice_items => './fixture/invoice_item_fixture.csv',
-              :transactions  => './fixture/transaction_fixture.csv',
-              :customers     => './data/customers.csv'})
+              :items         => 'fixture/items_fixture_3.csv',
+              :merchants     => 'fixture/merchants_fixture.csv',
+              :invoices      => 'fixture/invoices_fixtures.csv',
+              :invoice_items => 'fixture/invoice_item_fixture.csv',
+              :transactions  => 'fixture/transaction_fixture.csv',
+              :customers     => 'data/customers.csv'})
     @invoices = se.invoices
   end
 
@@ -69,7 +69,7 @@ class InvoiceRepositoryTest < Minitest::Test
 
   def test_invoice_can_ask_for_merchant
     parent = Minitest::Mock.new
-    invoices = InvoiceRepository.new('data/invoices_fixtures.csv', parent)
+    invoices = InvoiceRepository.new('fixture/invoices_fixtures.csv', parent)
     parent.expect(:find_merchant_by_id, nil, [12335938])
     invoices.find_merchant(12335938)
     assert parent.verify

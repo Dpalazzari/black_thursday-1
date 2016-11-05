@@ -8,12 +8,12 @@ class MerchantRepositoryTest < Minitest::Test
 
   def setup
     se = SalesEngine.from_csv({
-              :items     => 'data/item_fixture.csv',
-              :merchants => 'data/merchants_fixture.csv',
-              :invoices  => 'data/invoices_fixtures.csv',
-              :invoice_items => './fixture/invoice_item_fixture.csv',
-              :transactions  => './fixture/transaction_fixture.csv',
-              :customers     => './data/customers.csv'})
+              :items         => 'fixture/items_fixture_3.csv',
+              :merchants     => 'fixture/merchants_fixture.csv',
+              :invoices      => 'fixture/invoices_fixtures.csv',
+              :invoice_items => 'fixture/invoice_item_fixture.csv',
+              :transactions  => 'fixture/transaction_fixture.csv',
+              :customers     => 'data/customers.csv'})
     @merchant_repository = se.merchants
   end
 
@@ -70,7 +70,7 @@ class MerchantRepositoryTest < Minitest::Test
 
   def test_merchant_can_ask_se_for_items
     parent = Minitest::Mock.new
-    merchants = MerchantRepository.new('data/merchants_fixture.csv', parent)
+    merchants = MerchantRepository.new('fixture/merchants_fixture.csv', parent)
     parent.expect(:find_all_items_by_merchant_id, nil, [12335938])
     merchants.find_all_items_by_merchant_id(12335938)
     assert parent.verify
@@ -78,7 +78,7 @@ class MerchantRepositoryTest < Minitest::Test
 
   def test_it_can_ask_se_for_invoices
     parent = Minitest::Mock.new
-    merchants = MerchantRepository.new('data/merchants_fixture.csv', parent)
+    merchants = MerchantRepository.new('fixture/merchants_fixture.csv', parent)
     parent.expect(:find_all_invoices_by_merchant_id, nil, [12335938])
     merchants.find_all_invoices_by_merchant_id(12335938)
     assert parent.verify

@@ -54,9 +54,9 @@ class ItemRepository
     end
   end
 
-  def find_all_by_merchant_id(number)
+  def find_all_by_merchant_id(id)
     all.find_all do |item|
-      item.merchant_id == number
+      item.merchant_id == id
     end
   end
 
@@ -67,5 +67,4 @@ class ItemRepository
   def inspect
     "#<#{self.class} #{@all.size} rows>"
   end
-
 end

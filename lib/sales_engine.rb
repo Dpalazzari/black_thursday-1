@@ -20,7 +20,7 @@ class SalesEngine
     @merchants     =  MerchantRepository.new(hash[:merchants], self)
     @invoices      =  InvoiceRepository.new(hash[:invoices], self)
     @invoice_items =  InvoiceItemRepository.new(hash[:invoice_items], self)
-    # @transactions  =  TransactionRepository.new(hash[:transactions], self)
+    @transactions  =  TransactionRepository.new(hash[:transactions], self)
     @customers     =  CustomerRepository.new(hash[:customers], self)
   end
 

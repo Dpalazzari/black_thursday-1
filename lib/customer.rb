@@ -9,7 +9,7 @@ class Customer
               :parent
 
   def initialize(customer_hash, customer_repository = nil)
-    @id           = customer_hash[:id]
+    @id           = customer_hash[:id].to_i
     @first_name   = customer_hash[:first_name]
     @last_name    = customer_hash[:last_name]
     @created_at   = determine_the_time(customer_hash[:created_at])

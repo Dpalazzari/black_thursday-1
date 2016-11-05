@@ -24,7 +24,9 @@ class TransactionTest < Minitest::Test
 
   def test_it_initializes_with_proper_hash_values
     assert 6, transaction.id
+    assert Integer, transaction.id.class
     assert 8, transaction.invoice_id
+    assert Integer, transaction.invoice_id.class
     assert "4242424242424242", transaction.credit_card_number
     assert "success", transaction.result
   end

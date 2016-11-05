@@ -19,22 +19,21 @@ class TransactionRepository
   end
 
   def load_all
-    @all = csv.collect do |line|
-      Transaction.new(line, self)
-    end
-    all
+    @all = csv.collect { |line| Transaction.new(line, self) }
   end
 
   def find_by_id(id)
-    all.find { |transaction| transaction.id == id }
+    all.detect { |transaction| transaction.id == id }
   end
 
   def find_all_by_invoice_id(inv_id)
     all.find_all { |transaction| transaction.invoice_id == inv_id }
   end
 
-  def find_all_by_credit_card_number(number)
-    all.find_all { |transaction| transaction.credit_card_number == number }
+  def find_all_by_credit_card_number(credit_card_number)
+    all.find_all do |transaction|
+      transaction.credit_card_number == credit_card_number
+    end
   end
 
   def find_all_by_result(word)

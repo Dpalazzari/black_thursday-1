@@ -43,7 +43,11 @@ class InvoiceItemRepositoryTest < Minitest::Test
     result = @invoice_items.find_all_by_invoice_id(2)
     assert_equal Array, result.class
     assert_equal InvoiceItem, result[0].class
-    assert_equal 263454779, result.first.item_id
+    assert_equal 263529264, result.first.item_id
+  end
+
+  def test_find_all_by_invoice_id_can_return_multiple_invoices
+
   end
 
   # def test_invoice_can_ask_for_merchant

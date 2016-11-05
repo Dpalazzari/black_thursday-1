@@ -40,10 +40,22 @@ class CustomerRepositoryTest < Minitest::Test
     assert_equal 10, result[0].id
   end
 
+  def test_find_all_by_first_name_returns_multiple_customers
+    result = customers.find_all_by_first_name("oe")
+    assert_equal Array, result.class
+    assert_equal 8, result.count
+  end
+
   def test_find_all_by_last_name
     result = customers.find_all_by_last_name("Reynolds")
     assert_equal Array, result.class
     assert_equal 10, result[0].id
     assert_equal "Ramona", result[0].first_name
+  end
+
+  def test_find_all_by_last_name_can_return_multiple_customers
+    result = customers.find_all_by_last_name("cH")
+    assert_equal Array, result.class
+    assert_equal 17, result[0].id
   end
 end

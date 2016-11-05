@@ -9,10 +9,12 @@ class SalesAnalystTest < Minitest::Test
 
   def setup
     @se = SalesEngine.from_csv({
-  :items     => "./fixture/items_fixture_3.csv",
-  :merchants => "./fixture/merchants_fixture_3.csv",
-  :invoices  => "./data/invoices_fixtures.csv"
-  })
+      :items         => 'data/items.csv',
+      :merchants     => 'data/merchants.csv',
+      :invoices      => 'data/invoices.csv',
+      :invoice_items => 'data/invoice_items.csv',
+      :transactions  => 'data/transactions.csv',
+      :customers     => 'data/customers.csv'})
   @sa = SalesAnalyst.new(@se)
   end
 
@@ -38,11 +40,11 @@ class SalesAnalystTest < Minitest::Test
     result = sa.average(array)
     assert_equal 4, result
   end
-
-  def test_average_items_per_merchant
-    result = sa.average_items_per_merchant
-    assert_equal 0.07, result
-  end
+  #
+  # def test_average_items_per_merchant
+  #   result = sa.average_items_per_merchant
+  #   assert_equal 0.07, result
+  # end
 
   def test_standard_deviation_gives_standard_dev
     array = [3,4,5]
@@ -52,37 +54,37 @@ class SalesAnalystTest < Minitest::Test
 
   def test_average_items_per_merchant
     result = sa.average_items_per_merchant
-    assert_equal 0.07, result
+    assert_equal 2.88, result
     assert_equal Float, result.class
   end
 
   def test_average_items_per_merchant_std_dev
     result = sa.average_items_per_merchant_standard_deviation
-    assert_equal 0.3, result
+    assert_equal 3.26, result
     assert_equal Float, result.class
   end
 
   def test_it_finds_merchants_with_high_item_counts
     result = sa.merchants_with_high_item_count
-    assert_equal "Shopin1901", result.first.name
+    assert_equal "Keckenbauer", result.first.name
   end
 
   def test_average_item_price_for_merchant_returns_price
     result = sa.average_item_price_for_merchant(12334105)
     assert_equal BigDecimal, result.class
-    assert_equal 13.0 , result.to_f
+    assert_equal 16.66 , result.to_f
   end
 
   def test_average_average_price_per_merchant
     result = sa.average_average_price_per_merchant
     assert_equal BigDecimal, result.class
-    assert_equal 197.56, result.to_f
+    assert_equal 350.29, result.to_f
   end
 
   def test_item_standard_deviation
     result = sa.get_item_standard_deviation
     assert_equal Float, result.class
-    assert_equal 230.56, result.round(2)
+    assert_equal 2900.99, result.round(2)
   end
 
   def test_golden_items_returns_array
@@ -98,35 +100,35 @@ class SalesAnalystTest < Minitest::Test
 
   def test_it_finds_average_invoices_per_merchant
     result = sa.average_invoices_per_merchant
-    assert_equal 2.1, result
+    assert_equal 10.49, result
     assert_equal Float, result.class
   end
 
   def test_average_invoices_standard_deviation
     r = sa.average_invoices_per_merchant_standard_deviation
-    assert_equal 1.44, r
+    assert_equal 3.29, r
   end
 
   def test_it_can_find_the_top_merchants_by_invoice_count
     result = sa.top_merchants_by_invoice_count
     assert_equal Array, result.class
-    assert_equal 32, result.count
+    assert_equal 12, result.count
   end
 
   def test_it_can_find_the_bottom_merchants_by_invoice_count
     result = sa.top_merchants_by_invoice_count
-    assert_equal 32, result.count
+    assert_equal 12, result.count
   end
 
   def test_it_can_tell_us_the_day_of_the_week_from_date
     result = sa.top_days_by_invoice_count
-    assert_equal ["Saturday"], result
+    assert_equal ["Wednesday"], result
   end
 
   def test_invoice_status_matches_status
     result = sa.invoice_status(:pending)
     assert_equal Float, result.class
-    assert_equal 31.03, result
+    assert_equal 29.55, result
   end
 
 end

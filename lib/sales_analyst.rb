@@ -97,7 +97,7 @@ class SalesAnalyst
     mean         = get_item_average_price
     std_dev      = get_item_standard_deviation
     threshold    = BigDecimal(mean + std_dev, 4)
-    golden_items = golden_items_compared_to_threshold(threshold)
+    golden_items_compared_to_threshold(threshold)
   end
 
   def golden_items_compared_to_threshold(threshold)
@@ -135,7 +135,7 @@ class SalesAnalyst
   def bottom_merchants_by_invoice_count
     std_dev   = average_invoices_per_merchant_standard_deviation
     threshold = average_invoices_per_merchant - (std_dev * 2)
-    answer    = bottom_invoice_count(threshold)
+    bottom_invoice_count(threshold)
   end
 
   def bottom_invoice_count(threshold)
@@ -157,7 +157,7 @@ class SalesAnalyst
     invoices_by_day.keys.select do |day|
       invoices_by_day[day].count > threshold
     end
-   end
+  end
 
   def invoice_status(status)
     matches = sales_engine.invoices.all.find_all do |invoice_instance|

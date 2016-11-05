@@ -13,7 +13,7 @@ class TransactionRepositoryTest < Minitest::Test
               :merchants => 'data/merchants_fixture.csv',
               :invoices  => 'data/invoices_fixtures.csv',
               :invoice_items => './fixture/invoice_item_fixture.csv',
-              :transactions => './fixture/transaction_fixtrue.csv',
+              :transactions => './fixture/transaction_fixture.csv',
               :customers => './data/customers.csv'})
     @transaction_repository = se.transactions
   end

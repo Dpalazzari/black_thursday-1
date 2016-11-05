@@ -12,8 +12,8 @@ class Customer
     @id           = customer_hash[:id].to_i
     @first_name   = customer_hash[:first_name]
     @last_name    = customer_hash[:last_name]
-    @created_at   = determine_the_time(customer_hash[:created_at])
-    @updated_at   = determine_the_time(customer_hash[:updated_at])
+    @created_at   = determine_the_time(customer_hash[:created_at].to_s)
+    @updated_at   = determine_the_time(customer_hash[:updated_at].to_s)
     @parent       = customer_repository
   end
 

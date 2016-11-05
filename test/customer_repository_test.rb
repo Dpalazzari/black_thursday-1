@@ -11,11 +11,8 @@ class CustomerRepositoryTest < Minitest::Test
       :merchants     => 'data/merchants_fixture.csv',
       :invoices      => 'data/invoices_fixtures.csv',
       :invoice_items => 'fixture/invoice_item_fixture.csv',
-      :customers     => 'fixture/customer_fixture.csv',
-
-
-
-      })
+      :transactions => './fixture/transaction_fixtrue.csv'
+      :customers     => 'fixture/customer_fixture.csv'})
     @customers = se.customers
   end
 end

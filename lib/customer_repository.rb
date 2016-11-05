@@ -2,8 +2,9 @@ require_relative 'customer'
 require 'csv'
 
 class CustomerRepository
-  attr_reader :all,
-              :csv,
+
+  attr_reader :csv,
+              :all,
               :parent
 
   def initialize(path, sales_engine)
@@ -24,29 +25,17 @@ class CustomerRepository
     all
   end
 
-  # def find_by_id(id)
-  #   all.find { |merchant| merchant.id == id }
-  # end
-  #
-  # def find_by_name(full_name)
-  #   all.detect do |merchant|
-  #     merchant.name.upcase == full_name.upcase
-  #   end
-  # end
-  #
-  # def find_all_by_name(name_frag)
-  #   all.find_all do |merchant|
-  #     merchant.name.upcase.include?(name_frag.upcase)
-  #   end
-  # end
-  #
-  # def find_all_items_by_merchant_id(id)
-  #   @parent.find_all_items_by_merchant_id(id)
-  # end
-  #
-  # def find_all_invoices_by_merchant_id(id)
-  #   @parent.find_all_invoices_by_merchant_id(id)
-  # end
+  def find_by_id(id)
+    all.find { |customer| customer.id == id }
+  end
+
+  def find_all_by_first_name(name)
+    all.find_all { |customer| customer.first_name == name }
+  end
+
+  def find_all_by_last_name(last)
+    all.find_all { |cutomer| customer.last_name == last }
+  end
 
   def inspect
   "#<#{self.class} #{@all.size} rows>"

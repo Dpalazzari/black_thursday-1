@@ -148,7 +148,6 @@ class SalesAnalyst
     invoices_by_day = sales_engine.invoices.all.group_by do |invoice_instance|
       Time.at(invoice_instance.created_at).strftime("%A")
     end
-    # binding.pry
     invoice_count = invoices_by_day.keys.map do |key|
       invoices_by_day[key].count
     end
@@ -158,14 +157,6 @@ class SalesAnalyst
     invoices_by_day.keys.select do |day|
       invoices_by_day[day].count > threshold
     end
-    # output = invoices_by_day.keys.zip(invoice_count)
-    # result = output.find do |day|
-    #   day[1] > threshold
-    # end
-    # [result[0]]
-    # sales_engine.invoices.all.group_by do |invoice|
-    #   invoice.created_at.strftime(%A)
-    # end
    end
 
   def invoice_status(status)
@@ -174,7 +165,5 @@ class SalesAnalyst
     end
     x = (matches.count / sales_engine.invoices.all.count.to_f)
     (x * 100).round(2)
-    # returns percentage of invoices with status (as a symbol)
-    # result should look like 5.25
   end
 end

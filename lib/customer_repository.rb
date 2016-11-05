@@ -30,11 +30,11 @@ class CustomerRepository
   end
 
   def find_all_by_first_name(name)
-    all.find_all { |customer| customer.first_name == name }
+    all.find_all {|customer| customer.first_name.upcase.include?(name.upcase) }
   end
 
   def find_all_by_last_name(last)
-    all.find_all { |customer| customer.last_name == last }
+    all.find_all { |customer| customer.last_name.upcase.include?(last.upcase) }
   end
 
   def inspect

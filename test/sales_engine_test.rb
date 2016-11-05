@@ -79,8 +79,8 @@ class SalesEngineTest < Minitest::Test
   end
 
   def test_find_all_items_by_merchant_id
-    result = se.find_all_items_by_merchant_id(12334141)
-    assert_equal Item, result.class
+    result = se.find_all_items_by_merchant_id(12334185)
+    assert_equal Item, result[0].class
   end
 
   # def teset_find_merchant_by_id

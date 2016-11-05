@@ -3,15 +3,17 @@ require_relative '../lib/invoice_item_repository'
 require_relative '../lib/sales_engine'
 
 class InvoiceItemRepositoryTest < Minitest::Test
-  attr_reader :invoice_items
+  attr_reader :se,
+              :invoice_items
 
   def setup
-    se = SalesEngine.from_csv({
-      :items          => 'data/item_fixture.csv',
-      :merchants      => 'data/merchants_fixture.csv',
-      :invoices       => 'data/invoices_fixtures.csv',
-      :invoice_items  => 'fixture/invoice_item_fixture.csv',
-      :customers      => 'fixture/customer_fixture.csv'})
+    @se = SalesEngine.from_csv({
+              :items         => 'fixture/item_fixture_2.csv',
+              :merchants     => 'data/merchants_fixture.csv',
+              :invoices      => 'data/invoices_fixtures.csv',
+              :invoice_items => 'fixture/invoice_item_fixture.csv',
+              :transactions  => 'fixture/transaction_fixture.csv',
+              :customers     => 'data/customers.csv'})
     @invoice_items = se.invoice_items
   end
 
@@ -33,12 +35,14 @@ class InvoiceItemRepositoryTest < Minitest::Test
   def test_find_all_by_item_id_returns_invoice_item
     result = @invoice_items.find_all_by_item_id(263454779)
     assert_equal Array, result.class
+    assert_equal InvoiceItem, result[0].class
     assert_equal 263454779, result.first.item_id
   end
 
   def test_find_all_by_invoice_id_returns_invoice_item
     result = @invoice_items.find_all_by_invoice_id(2)
     assert_equal Array, result.class
+    assert_equal InvoiceItem, result[0].class
     assert_equal 263454779, result.first.item_id
   end
 

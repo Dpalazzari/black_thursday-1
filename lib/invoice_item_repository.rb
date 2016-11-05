@@ -31,13 +31,13 @@ class InvoiceItemRepository
   end
 
   def find_all_by_item_id(id)
-    all.find do |invoice_item|
+    all.find_all do |invoice_item|
       invoice_item.item_id == id
     end
   end
 
   def find_all_by_invoice_id(id)
-    all.find do |invoice_item|
+    all.find_all do |invoice_item|
       invoice_item.id == id
     end
   end

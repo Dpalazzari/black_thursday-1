@@ -11,7 +11,7 @@ class SalesEngineTest < Minitest::Test
               :merchants     => 'data/merchants_fixture.csv',
               :invoices      => 'data/invoices_fixtures.csv',
               :invoice_items => 'fixture/invoice_item_fixture.csv',
-              # :transactions  => 'fixture/transaction_fixture.csv',
+              :transactions  => 'fixture/transaction_fixture.csv',
               :customers     => 'data/customers.csv'})
   end
 
@@ -21,7 +21,7 @@ class SalesEngineTest < Minitest::Test
     assert_equal MerchantRepository, se.merchants.class
     assert_equal InvoiceRepository, se.invoices.class
     assert_equal InvoiceItemRepository, se.invoice_items.class
-    # assert_equal TransactionRepository, se.transactions.class
+    assert_equal TransactionRepository, se.transactions.class
     assert_equal CustomerRepository, se.customers.class
   end
 
@@ -54,10 +54,9 @@ class SalesEngineTest < Minitest::Test
   end
 
   def test_loads_transactions_from_csv
-    skip
     result = se.transactions.all.first
     assert_equal Transaction, result.class
-    assert_equal 0, result.items.count
+    assert_equal 2179, result.invoice_id
   end
 
   def test_loads_customers_from_csv
@@ -83,12 +82,13 @@ class SalesEngineTest < Minitest::Test
     assert_equal Item, result[0].class
   end
 
-  # def teset_find_merchant_by_id
-  #   skip
-  # end
-  #
-  # def test_find_all_invoices_by_merchant_id
-  #   skip
-  # end
+  def teset_find_merchant_by_id
+    result = se.find_merchant_by_id(12334185)
+    assert_equal Merchant, result[0].class
+  end
 
+  def test_find_all_invoices_by_merchant_id
+    result = se.find_all_invoices_by_merchant_id(12335938)
+    assert_equal Invoice, result[0].class
+  end
 end

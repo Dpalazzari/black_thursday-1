@@ -34,7 +34,7 @@ class CustomerRepository
   end
 
   def find_all_by_last_name(last)
-    all.find_all { |cutomer| customer.last_name == last }
+    all.find_all { |customer| customer.last_name == last }
   end
 
   def inspect

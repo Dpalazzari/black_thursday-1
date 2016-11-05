@@ -1,11 +1,25 @@
 require 'pry'
 
 class Customer
+  attr_reader :id,
+              :first_name,
+              :last_name,
+              :created_at,
+              :updated_at,
+              :parent
 
-  def initialize(argument)
-    @first_name = first_name
-    @last_name = last_name
-    @created_at = created_at
-    @updated_at = updated_at
+  def initialize(customer_hash, customer_repository = nil)
+    @id           = customer_hash[:id]
+    @first_name   = customer_hash[:first_name]
+    @last_name    = customer_hash[:last_name]
+    @created_at   = determine_the_time(customer_hash[:created_at])
+    @updated_at   = determine_the_time(customer_hash[:updated_at])
+    @parent       = customer_repository
+  end
+
+  def determine_the_time(time_string)
+    time = Time.new(0)
+    return time if time_string == ""
+    time_string = Time.parse(time_string)
   end
 end

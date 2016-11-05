@@ -139,6 +139,7 @@ class SalesAnalyst
     # result should look like ["Sunday", "Saturday"]
     dummy = sales_engine.invoices.all.group_by do |invoice_instance|
       invoice_instance.created_at.wday
+      #Time.at(invoice_instance.created_at).strftime(%A)
     end
     day_numbers = dummy.keys
     days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]

@@ -9,7 +9,10 @@ class SalesEngineTest < Minitest::Test
     @se = SalesEngine.from_csv({
               :items     => 'fixture/item_fixture_2.csv',
               :merchants => 'data/merchants_fixture.csv',
-              :invoices  => 'data/invoices_fixtures.csv'})
+              :invoices  => 'data/invoices_fixtures.csv',
+              :invoice_items => 'fixture/invoice_item_fixture.csv',
+              :transactions => 'fixture/transaction_fixture.csv',
+              :customers => 'data/customer.csv'})
   end
 
   def test_from_csv_instatiates_sales_engine
@@ -52,5 +55,21 @@ class SalesEngineTest < Minitest::Test
     assert_equal 12334105, result.id
     assert_equal "Shopin1901", result.name
   end
+
+  def test_it_initializes_with_invoice_items
+    assert se.invoice_items
+    assert_equal InvoiceItemRepository, se.invoice_items.class
+  end
+
+  def test_it_initializes_with_transactions
+    assert se.transactions
+    assert_equal TransactionsRepository, se.transactions.class
+  end
+
+  def test_it_initializes_with_customers
+    assert se.customers
+    assert_equal CustomerRepository, se.customers.class
+  end
+
 
 end

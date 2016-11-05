@@ -4,10 +4,10 @@ require_relative '../lib/invoice_item'
 
 class InvoiceItemRepository
 
-  # attr_reader :csv,
-  #             :all,
-  #             :parent
-  #
+  attr_reader :csv,
+              :all,
+              :parent
+
   def initialize(path, sales_engine)
     @all = []
     @parent = sales_engine

@@ -1,4 +1,5 @@
 require 'pry'
+require 'time'
 
 class SalesAnalyst
   attr_reader :sales_engine,
@@ -93,13 +94,16 @@ class SalesAnalyst
   end
 
   def golden_items
-    ave = get_item_average_price
-    std_dev = get_item_standard_deviation
-    threshold = BigDecimal(ave + std_dev, 4)
-    golden_items = @sales_engine.items.all.find_all do |item|
+    mean         = get_item_average_price
+    std_dev      = get_item_standard_deviation
+    threshold    = BigDecimal(mean + std_dev, 4)
+    golden_items = golden_items_compared_to_threshold(threshold)
+  end
+
+  def golden_items_compared_to_threshold(threshold)
+    @sales_engine.items.all.find_all do |item|
         item.unit_price > threshold * 2
       end
-      golden_items
   end
 
   ### --- invoice methods --- ###
@@ -111,6 +115,7 @@ class SalesAnalyst
   end
 
   def average_invoices_per_merchant_standard_deviation
+    #different enumerable?
     invoices_per_merchant = []
     @merchants.each do |merchant_instance|
       invoices_per_merchant << merchant_instance.invoices.count
@@ -128,38 +133,40 @@ class SalesAnalyst
   end
 
   def bottom_merchants_by_invoice_count
-    std_dev = average_invoices_per_merchant_standard_deviation
+    std_dev   = average_invoices_per_merchant_standard_deviation
     threshold = average_invoices_per_merchant - (std_dev * 2)
+    answer    = bottom_invoice_count(threshold)
+  end
+
+  def bottom_invoice_count(threshold)
     @merchants.find_all do |merchant|
         merchant.invoices.count < threshold
       end
   end
 
   def top_days_by_invoice_count
-    # result should look like ["Sunday", "Saturday"]
-    dummy = sales_engine.invoices.all.group_by do |invoice_instance|
-      invoice_instance.created_at.wday
+    invoices_by_day = sales_engine.invoices.all.group_by do |invoice_instance|
+      Time.at(invoice_instance.created_at).strftime("%A")
     end
-    day_numbers = dummy.keys
-    days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-    values = dummy.keys.map do |key|
-      dummy[key].count
+    # binding.pry
+    invoice_count = invoices_by_day.keys.map do |key|
+      invoices_by_day[key].count
     end
-    new_array = day_numbers.zip(values)
-    newer_array = new_array.sort.zip(days)
-    y = newer_array.sort_by do |x|
-      x[0][1]
-    end.reverse!
-    [y[0][1], y[1][1]]
-    std_dev = find_standard_deviation(values)
-    avg = average(values)
+    std_dev = find_standard_deviation(invoice_count)
+    avg = average(invoice_count)
     threshold = (std_dev) + avg
-    z = []
-    y.each do |day|
-      z << day[1] if day[0][1] > threshold
+    invoices_by_day.keys.select do |day|
+      invoices_by_day[day].count > threshold
     end
-    z
-  end
+    # output = invoices_by_day.keys.zip(invoice_count)
+    # result = output.find do |day|
+    #   day[1] > threshold
+    # end
+    # [result[0]]
+    # sales_engine.invoices.all.group_by do |invoice|
+    #   invoice.created_at.strftime(%A)
+    # end
+   end
 
   def invoice_status(status)
     matches = sales_engine.invoices.all.find_all do |invoice_instance|

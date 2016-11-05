@@ -50,6 +50,12 @@ class SalesAnalystTest < Minitest::Test
     assert_equal 1, result
   end
 
+  def test_average_items_per_merchant
+    result = sa.average_items_per_merchant
+    assert_equal 0.07, result
+    assert_equal Float, result.class
+  end
+
   def test_average_items_per_merchant_std_dev
     result = sa.average_items_per_merchant_standard_deviation
     assert_equal 0.3, result
@@ -64,12 +70,19 @@ class SalesAnalystTest < Minitest::Test
   def test_average_item_price_for_merchant_returns_price
     result = sa.average_item_price_for_merchant(12334105)
     assert_equal BigDecimal, result.class
-    # assert this is right number?
+    assert_equal 13.0 , result.to_f
   end
+
   def test_average_average_price_per_merchant
     result = sa.average_average_price_per_merchant
     assert_equal BigDecimal, result.class
-    # assert this is right number?
+    assert_equal 197.56, result.to_f
+  end
+
+  def test_item_standard_deviation
+    result = sa.get_item_standard_deviation
+    assert_equal Float, result.class
+    assert_equal 230.56, result.round(2)
   end
 
   def test_golden_items_returns_array
@@ -77,10 +90,21 @@ class SalesAnalystTest < Minitest::Test
     assert_equal Array, result.class
   end
 
+  def test_golden_items_threshold
+    result = sa.golden_items_compared_to_threshold(100)
+    assert_equal Item, result.first.class
+    assert_equal "Course contre la montre", result.first.name
+  end
+
   def test_it_finds_average_invoices_per_merchant
     result = sa.average_invoices_per_merchant
     assert_equal 2.1, result
     assert_equal Float, result.class
+  end
+
+  def test_average_invoices_standard_deviation
+    r = sa.average_invoices_per_merchant_standard_deviation
+    assert_equal 1.44, r
   end
 
   def test_it_can_find_the_top_merchants_by_invoice_count
@@ -102,7 +126,7 @@ class SalesAnalystTest < Minitest::Test
   def test_invoice_status_matches_status
     result = sa.invoice_status(:pending)
     assert_equal Float, result.class
-    assert_equal 31.0, result
+    assert_equal 31.03, result
   end
 
 end

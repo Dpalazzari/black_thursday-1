@@ -42,6 +42,10 @@ class InvoiceItemRepository
     end
   end
 
+  def find_items(item_id)
+    @parent.find_items_by_item_id(item_id)
+  end
+
   def inspect
     "#<#{self.class} #{@all.size} rows>"
   end

@@ -45,4 +45,20 @@ class InvoiceItemTest < Minitest::Test
     assert_equal Time, result.class
     assert_equal Time, result2.class
   end
+
+  def test_invoiceitem_can_ask_for_item
+    parent = Minitest::Mock.new
+    invoice_item = InvoiceItem.new({
+      :id         => "6",
+      :item_id    => "7",
+      :invoice_id => "8",
+      :quantity   => "1",
+      :unit_price => "13635",
+      :created_at => "2012-03-27 14:54:09 UTC",
+      :updated_at => "2012-03-27 14:54:09 UTC"
+      }, parent)
+    parent.expect(:find_items, nil, [invoice_item.item_id])
+    invoice_item.item
+    assert parent.verify
+  end
 end

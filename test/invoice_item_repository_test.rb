@@ -46,11 +46,11 @@ class InvoiceItemRepositoryTest < Minitest::Test
     assert_equal 263529264, result.first.item_id
   end
 
-  # def test_invoice_can_ask_for_merchant
-  #   parent = Minitest::Mock.new
-  #   invoices = InvoiceRepository.new('data/invoices_fixtures.csv', parent)
-  #   parent.expect(:find_merchant_by_id, nil, [12335938])
-  #   invoices.find_merchant(12335938)
-  #   assert parent.verify
-  # end
+  def test_invoice_items_can_ask_for_items
+    parent = Minitest::Mock.new
+    invoice_items = InvoiceItemRepository.new('fixture/invoice_item_fixture.csv', parent)
+    parent.expect(:find_items_by_item_id, nil, [263400013])
+    invoice_items.find_items(263400013)
+    assert parent.verify
+  end
 end

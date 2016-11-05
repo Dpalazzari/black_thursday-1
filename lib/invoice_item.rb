@@ -41,6 +41,10 @@ class InvoiceItem
     return time if time_string == ""
     time_string = Time.parse(time_string)
   end
+
+  def item
+    @parent.find_items(@item_id)
+  end
   #
   # def merchant
   #   @parent.find_merchant(@merchant_id)

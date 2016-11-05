@@ -7,9 +7,9 @@ class SalesEngineTest < Minitest::Test
 
   def setup
     @se = SalesEngine.from_csv({
-              :items         => 'fixture/item_fixture_2.csv',
-              :merchants     => 'data/merchants_fixture.csv',
-              :invoices      => 'data/invoices_fixtures.csv',
+              :items         => 'fixture/items_fixture_3.csv',
+              :merchants     => 'fixture/merchants_fixture.csv',
+              :invoices      => 'fixture/invoices_fixtures.csv',
               :invoice_items => 'fixture/invoice_item_fixture.csv',
               :transactions  => 'fixture/transaction_fixture.csv',
               :customers     => 'data/customers.csv'})
@@ -28,8 +28,8 @@ class SalesEngineTest < Minitest::Test
   def test_loads_items_from_csv
     result = se.items.all.first
     assert_equal Item, result.class
-    assert_equal "Custom Hand Made Miniature Bicycle", result.name
-    assert_equal 263400121, result.id
+    assert_equal "Glitter scrabble frames", result.name
+    assert_equal 263395617, result.id
   end
 
   def test_loads_merchants_from_csv
@@ -68,7 +68,7 @@ class SalesEngineTest < Minitest::Test
   def test_it_creates_a_hash_of_item_instances
     result = se.load_items
     assert_equal Hash, result.class
-    assert_equal 12334113, result.keys.first
+    assert_equal 12334105, result.keys.first
   end
 
   def test_it_loads_invoices
@@ -88,7 +88,7 @@ class SalesEngineTest < Minitest::Test
   end
 
   def test_find_all_invoices_by_merchant_id
-    result = se.find_all_invoices_by_merchant_id(12335938)
+    result = se.find_all_invoices_by_merchant_id(12334839)
     assert_equal Invoice, result[0].class
   end
 end

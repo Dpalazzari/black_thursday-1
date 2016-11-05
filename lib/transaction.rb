@@ -1,4 +1,4 @@
- class Transaction
+class Transaction
 
   attr_reader :id,
               :invoice_id,
@@ -25,5 +25,4 @@
     return time if time_string == ""
     time_string = Time.parse(time_string)
   end
-
 end

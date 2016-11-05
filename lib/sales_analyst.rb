@@ -166,4 +166,9 @@ class SalesAnalyst
     x = (matches.count / sales_engine.invoices.all.count.to_f)
     (x * 100).round(2)
   end
+
+  ### --- relationship methods --- ###
+
+
+
 end

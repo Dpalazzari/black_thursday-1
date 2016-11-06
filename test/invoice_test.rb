@@ -70,4 +70,32 @@ class InvoiceTest < Minitest::Test
     invoice.items
     assert parent.verify
   end
+
+  def test_invoice_can_ask_for_transactions
+    parent = Minitest::Mock.new
+    invoice = Invoice.new({:id => "1",
+                      :customer_id => "2",
+                      :merchant_id => "12335938",
+                      :status => "pending",
+                      :created_at => "2009-02-07",
+                      :updated_at => "2014-03-15"
+                      }, parent)
+    parent.expect(:find_transactions, nil, [invoice.id])
+    invoice.transactions
+    assert parent.verify
+  end
+
+  def test_invoice_can_ask_for_customer
+    parent = Minitest::Mock.new
+    invoice = Invoice.new({:id => "1",
+                      :customer_id => "2",
+                      :merchant_id => "12335938",
+                      :status => "pending",
+                      :created_at => "2009-02-07",
+                      :updated_at => "2014-03-15"
+                      }, parent)
+    parent.expect(:find_customer, nil, [invoice.customer_id])
+    invoice.customer
+    assert parent.verify
+  end
 end

@@ -40,6 +40,10 @@ class TransactionRepository
     all.find_all { |transaction| transaction.result == word }
   end
 
+  def find_invoice(id)
+    @parent.find_invoice_by_id(id)
+  end
+
   def inspect
     "#<#{self.class} #{@all.size} rows>"
   end

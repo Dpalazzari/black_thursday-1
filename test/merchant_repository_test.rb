@@ -83,4 +83,12 @@ class MerchantRepositoryTest < Minitest::Test
     merchants.find_all_invoices_by_merchant_id(12335938)
     assert parent.verify
   end
+
+  def test_merchant_repo_can_ask_sales_engine_for_customers
+    parent = Minitest::Mock.new
+    merchants = MerchantRepository.new('fixture/merchants_fixture.csv', parent)
+    parent.expect(:find_all_invoices_by_merchant_id, nil, [12335938])
+    merchants.find_all_invoices_by_merchant_id(12335938)
+    assert parent.verify
+  end
 end

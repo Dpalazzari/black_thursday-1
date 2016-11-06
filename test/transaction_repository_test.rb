@@ -93,4 +93,12 @@ class TransactionRepositoryTest < Minitest::Test
     assert_equal Time, output[0].updated_at.class
   end
 
+  def test_transaction_can_ask_for_invoice
+    parent = Minitest::Mock.new
+    transactions = TransactionRepository.new('fixture/transaction_fixture.csv', parent)
+    parent.expect(:find_invoice_by_id, nil, [1])
+    transactions.find_invoice(1)
+    assert parent.verify
+  end
+
 end

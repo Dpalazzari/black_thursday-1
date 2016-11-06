@@ -97,5 +97,27 @@ class SalesEngineTest < Minitest::Test
     assert_equal Item, result.compact[0].class
   end
 
+  def test_find_transactions_by_invoice_id
+    result = se.find_transactions_by_invoice_id(135)
+    assert_equal Transaction, result[0].class
+  end
 
+  def test_find_customer_by_id
+    result = se.find_customer_by_id(1)
+    assert_equal Customer, result.class
+    assert_equal "Joey", result.first_name
+  end
+
+  def test_find_invoice_by_transaction_id
+    result = se.find_invoice_by_id(1)
+    assert_equal Invoice, result.class
+    assert_equal :pending, result.status
+  end
+
+  def test_find_customers_by_merchant_id
+    result = se.find_customers_by_merchant_id(12334839)
+    assert_equal Array, result.class
+    assert_equal Customer, result[0].class
+    assert_equal "Cecelia", result[0].first_name
+  end
 end

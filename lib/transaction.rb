@@ -25,4 +25,8 @@ class Transaction
     return time if time_string == ""
     time_string = Time.parse(time_string)
   end
+
+  def invoice
+    @parent.find_invoice(@invoice_id)
+  end
 end

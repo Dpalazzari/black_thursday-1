@@ -140,4 +140,9 @@ class SalesEngineTest < Minitest::Test
     assert_equal 5289.13, result_2.total.to_f
   end
 
+  def test_find_invoice_items_by_invoice_id
+    result = se.invoices.find_invoice_items_by_invoice_id(2)
+    assert_equal InvoiceItem, result[0].class
+  end
+
 end

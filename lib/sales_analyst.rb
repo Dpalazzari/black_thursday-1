@@ -5,13 +5,15 @@ class SalesAnalyst
   attr_reader :sales_engine,
               :items,
               :merchants,
-              :invoices
+              :invoices,
+              :transactions
 
   def initialize(sales_engine)
     @sales_engine = sales_engine
     @items = load_items
     @merchants = load_merchants
     @invoices = load_invoices
+    @transactions = sales_engine.transactions
   end
 
   def load_items
@@ -25,6 +27,10 @@ class SalesAnalyst
   def load_invoices
     sales_engine.load_invoices
   end
+
+  # def load_transactions
+  #   sales_engine.load_transactions
+  # end
 
   def average(array)
     array.inject{ |sum, element| sum + element }.to_f / array.count
@@ -115,7 +121,6 @@ class SalesAnalyst
   end
 
   def average_invoices_per_merchant_standard_deviation
-    #different enumerable?
     invoices_per_merchant = []
     @merchants.each do |merchant_instance|
       invoices_per_merchant << merchant_instance.invoices.count
@@ -169,6 +174,39 @@ class SalesAnalyst
 
   ### --- relationship methods --- ###
 
+  def total_revenue_by_date(date)
+    invoice_days = sales_engine.invoices.find_all_by_date(date)
+    revenue = invoice_days.map do |invoice|
+      invoice.total
+    end
+    revenue.compact.reduce(:+)
+  end
 
+  def top_revenue_earners(x=20)
+    #gives top 20 merchants
+  end
 
+  def merchants_with_pending_invoices
+    #returns an array of merchants with pending status's
+  end
+
+  def merchants_with_only_one_item
+    #returns an array of merchants with one item
+  end
+
+  def merchants_with_only_one_item_registered_in_month(months_name)
+    #returns an array of merchants
+  end
+
+  def revenue_by_merchant(merchant_id)
+    #returns dollar amount in float of total revenue
+  end
+
+  def most_sold_item_for_merchant(merchant_id)
+    #returns array of one item instance inside, unless there is a tie of multiple items
+  end
+
+  def best_item_for_merchant(merchant_id)
+    #returns an item instance by revenue generated
+  end
 end

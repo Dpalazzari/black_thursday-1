@@ -61,4 +61,5 @@ class InvoiceItemTest < Minitest::Test
     invoice_item.item
     assert parent.verify
   end
+
 end

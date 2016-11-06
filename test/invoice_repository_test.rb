@@ -98,4 +98,12 @@ class InvoiceRepositoryTest < Minitest::Test
     invoices.find_customer(1)
     assert parent.verify
   end
+
+  def test_invoice_can_ask_for_invoice_items
+    parent = Minitest::Mock.new
+    invoices = InvoiceRepository.new('fixture/invoices_fixtures.csv', parent)
+    parent.expect(:find_invoice_items_by_invoice_id, nil, [1])
+    invoices.find_invoice_items_by_invoice_id(1)
+    assert parent.verify
+  end
 end

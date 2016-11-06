@@ -40,11 +40,6 @@ class SalesAnalystTest < Minitest::Test
     result = sa.average(array)
     assert_equal 4, result
   end
-  #
-  # def test_average_items_per_merchant
-  #   result = sa.average_items_per_merchant
-  #   assert_equal 0.07, result
-  # end
 
   def test_standard_deviation_gives_standard_dev
     array = [3,4,5]
@@ -129,5 +124,12 @@ class SalesAnalystTest < Minitest::Test
     result = sa.invoice_status(:pending)
     assert_equal Float, result.class
     assert_equal 29.55, result
+  end
+
+  def test_it_finds_total_revenue_by_date
+    date = Time.parse("2012-02-26")
+    result = sa.total_revenue_by_date(date)
+    assert_equal BigDecimal, result.class
+    assert_equal 11668.87, result.to_f
   end
 end

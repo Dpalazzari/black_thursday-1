@@ -40,6 +40,12 @@ class SalesEngine
     end
   end
 
+  # def load_transactions
+  #   transactions.all.group_by do |transactions_instance|
+  #     transactions_instance.updated_at
+  #   end
+  # end
+
   def find_all_items_by_merchant_id(id)
     @items.find_all_by_merchant_id(id)
   end

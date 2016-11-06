@@ -37,6 +37,10 @@ class CustomerRepository
     all.find_all { |customer| customer.last_name.upcase.include?(last.upcase) }
   end
 
+  def find_merchants_by_customer_id(id)
+    @parent.find_merchants_by_customer_id(id)
+  end
+
   def inspect
   "#<#{self.class} #{@all.size} rows>"
   end

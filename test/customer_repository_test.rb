@@ -58,4 +58,13 @@ class CustomerRepositoryTest < Minitest::Test
     assert_equal Array, result.class
     assert_equal 17, result[0].id
   end
+
+
+  def test_invoice_can_ask_for_customer
+    parent = Minitest::Mock.new
+    customers = CustomerRepository.new('data/customers.csv', parent)
+    parent.expect(:find_merchants_by_customer_id, nil, [1])
+    customers.find_merchants_by_customer_id(1)
+    assert parent.verify
+  end
 end

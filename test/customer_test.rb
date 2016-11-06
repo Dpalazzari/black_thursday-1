@@ -24,4 +24,16 @@ class CustomerTest < Minitest::Test
     assert_equal Time, customer.created_at.class
     assert_equal Time, customer.updated_at.class
   end
+
+  def test_merchant_can_ask_mr_for_customers
+    parent = Minitest::Mock.new
+    customer = Customer.new({:id         => "6",
+                             :first_name => "Joan",
+                             :last_name  => "Clarke",
+                             :created_at => Time.now,
+                             :updated_at => Time.now}, parent)
+    parent.expect(:find_merchants_by_customer_id, nil, [customer.id])
+    customer.merchants
+    assert parent.verify
+  end
 end

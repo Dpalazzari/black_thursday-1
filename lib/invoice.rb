@@ -39,4 +39,28 @@ class Invoice
   def customer
     @parent.find_customer(@customer_id)
   end
+
+  def is_paid_in_full?
+    matching_transactions = @parent.find_transactions(@id)
+    result = matching_transactions.map do |transaction|
+      transaction.result == "success"
+    end
+    if result.include?(false) || result.count == 0
+      return false
+    else
+      return true
+    end
+  end
+
+  def invoice_items
+    @parent.find_invoice_items_by_invoice_id(@id)
+  end
+
+  def total
+    if is_paid_in_full?
+      answer = invoice_items.compact.inject(0) do |result, element|
+        result += element.unit_price * element.quantity
+      end
+    end
+  end
 end

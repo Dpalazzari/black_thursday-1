@@ -130,5 +130,4 @@ class SalesAnalystTest < Minitest::Test
     assert_equal Float, result.class
     assert_equal 29.55, result
   end
-
 end

@@ -63,6 +63,10 @@ class SalesEngine
     array
   end
 
+  def find_invoice_items_by_invoice_id(id)
+    items = @invoice_items.find_all_by_invoice_id(id)
+  end
+
   def find_items_by_item_id(item_id)
     @items.find_by_id(item_id)
   end
@@ -88,6 +92,17 @@ class SalesEngine
     @customers.find_by_id(customer_id)
     end
     result.uniq
+  end
+
+  def find_merchants_by_customer_id(id)
+    matching_invoices = @invoices.find_all_by_customer_id(id)
+    matching_merchants = matching_invoices.map do |invoice|
+      invoice.merchant_id
+    end
+    result = matching_merchants.map do |id|
+      @merchants.find_by_id(id)
+    end
+    result.uniq.compact
   end
 
 end

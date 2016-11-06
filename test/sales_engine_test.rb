@@ -120,4 +120,24 @@ class SalesEngineTest < Minitest::Test
     assert_equal Customer, result[0].class
     assert_equal "Cecelia", result[0].first_name
   end
+
+  def test_find_merchants_by_customer_id
+    result = se.find_merchants_by_customer_id(42).compact
+    assert_equal Array, result.class
+    assert_equal Merchant, result[0].class
+    assert_equal 12334146, result[0].id
+  end
+
+  def test_invoice_paid_in_full_determines_transaction_status
+    result = se.invoices.find_by_id(520)
+    assert_equal false, result.is_paid_in_full?
+    result_2 = se.invoices.find_by_id(2)
+    assert_equal true, result_2.is_paid_in_full?
+  end
+
+  def test_invoice_total_returns_invoice_total
+    result_2 = se.invoices.find_by_id(2)
+    assert_equal 5289.13, result_2.total.to_f
+  end
+
 end

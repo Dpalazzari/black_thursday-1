@@ -22,4 +22,8 @@ class Customer
     return time if time_string == ""
     time_string = Time.parse(time_string)
   end
+
+  def merchants
+    @parent.find_merchants_by_customer_id(@id)
+  end
 end

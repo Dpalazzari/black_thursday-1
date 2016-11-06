@@ -58,7 +58,7 @@ class Invoice
 
   def total
     if is_paid_in_full?
-      answer = invoice_items.compact.inject(0) do |result, element|
+      invoice_items.compact.inject(0) do |result, element|
         result += element.unit_price * element.quantity
       end
     end

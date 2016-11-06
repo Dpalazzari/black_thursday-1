@@ -132,4 +132,30 @@ class SalesAnalystTest < Minitest::Test
     assert_equal BigDecimal, result.class
     assert_equal 11668.87, result.to_f
   end
+
+  # def test_it_can_find_the_top_merchants_by_revenue
+  #   result = sa.top_revenue_earners(10)
+  #   assert_equal Array, result.class
+  #   assert_equal "HoggardWoodworks", result.first.name
+  #   assert_equal 10, result.count
+  # end
+
+  def test_it_can_find_merchants_with_only_one_item
+    result = sa.merchants_with_only_one_item
+    assert_equal 243, result.count
+    assert_equal Array, result.class
+  end
+
+  # def test_it_can_return_merchants_with_one_item_in_a_month
+  #   skip
+  #   result = sa.merchants_with_only_one_item("November")
+  #   assert_equal Array, result.class
+  #   assert_equal Merchant, result[0].class
+  # end
+
+  def test_it_can_find_revenue_by_merchant
+    result = sa.revenue_by_merchant(12335747)
+    assert_equal 121321.29, result.to_f.round(2)
+    assert_equal BigDecimal, result.class
+  end
 end

@@ -182,24 +182,44 @@ class SalesAnalyst
     revenue.compact.reduce(:+)
   end
 
-  def top_revenue_earners(x=20)
-    #gives top 20 merchants
-  end
+  # def top_revenue_earners(x=20)
+  #   #gives top 20 merchants
+  #   thing = []
+  #   invoices.map do |merchant_id, values|
+  #     thing << [merchant_id, values.inject(0) do |sum, invoice_instance|
+  #       sum += invoice_instance.total.to_f
+  #     end]
+  #   end
+  #   merchants = thing.sort_by(&:last).reverse[0..(x-1)]
+  #   top = merchants.map do |merchant|
+  #     sales_engine.merchants.find_by_id(merchant[0])
+  #   end
+  #   top
+  #   # binding.pry
+  # end
 
   def merchants_with_pending_invoices
     #returns an array of merchants with pending status's
   end
 
   def merchants_with_only_one_item
-    #returns an array of merchants with one item
+    @merchants.find_all do |merchant|
+      merchant.items.count == 1
+    end
   end
 
   def merchants_with_only_one_item_registered_in_month(months_name)
     #returns an array of merchants
+    sales_engine.find_all_invoices_by_merchant_id
+    merchants_with_.group_by do |merchant|
+      merchant.created_at.strftime("%B").upcase == months_name.upcase
+    end
   end
 
   def revenue_by_merchant(merchant_id)
-    #returns dollar amount in float of total revenue
+    invoices[merchant_id].inject(0) do |sum , invoice_instance|
+      sum += invoice_instance.total
+    end
   end
 
   def most_sold_item_for_merchant(merchant_id)

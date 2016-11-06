@@ -67,4 +67,27 @@ class SalesEngine
     @items.find_by_id(item_id)
   end
 
+  def find_transactions_by_invoice_id(id)
+    @transactions.find_all_by_invoice_id(id)
+  end
+
+  def find_customer_by_id(id)
+    @customers.find_by_id(id)
+  end
+
+  def find_invoice_by_id(id)
+    @invoices.find_by_id(id)
+  end
+
+  def find_customers_by_merchant_id(id)
+    matching_invoices = @invoices.find_all_by_merchant_id(id)
+    matching_customers = matching_invoices.map do |invoice|
+      invoice.customer_id
+    end
+    result = matching_customers.map do |customer_id|
+    @customers.find_by_id(customer_id)
+    end
+    result.uniq
+  end
+
 end

@@ -31,4 +31,12 @@ class Invoice
   def items
     @parent.find_items(@id)
   end
+
+  def transactions
+    @parent.find_transactions(@id)
+  end
+
+  def customer
+    @parent.find_customer(@customer_id)
+  end
 end

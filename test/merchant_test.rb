@@ -49,4 +49,12 @@ class MerchantTest < Minitest::Test
     assert parent.verify
   end
 
+  def test_merchant_can_ask_mr_for_customers
+    parent = Minitest::Mock.new
+    merchant = Merchant.new({:id => 5, :name => "Turing School"}, parent)
+    parent.expect(:find_customers_by_id, nil, [merchant.id])
+    merchant.customers
+    assert parent.verify
+  end
+
 end

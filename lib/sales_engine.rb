@@ -64,7 +64,7 @@ class SalesEngine
   end
 
   def find_invoice_items_by_invoice_id(id)
-    items = @invoice_items.find_all_by_invoice_id(id)
+    @invoice_items.find_all_by_invoice_id(id)
   end
 
   def find_items_by_item_id(item_id)
@@ -99,8 +99,8 @@ class SalesEngine
     matching_merchants = matching_invoices.map do |invoice|
       invoice.merchant_id
     end
-    result = matching_merchants.map do |id|
-      @merchants.find_by_id(id)
+    result = matching_merchants.map do |merch_id|
+      @merchants.find_by_id(merch_id)
     end
     result.uniq.compact
   end

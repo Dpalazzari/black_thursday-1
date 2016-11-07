@@ -202,7 +202,7 @@ class SalesAnalyst
 
   def merchants_with_pending_invoices
     statuses = sales_engine.invoices.all.find_all do |invoice|
-      invoice.status == :pending
+      !invoice.is_paid_in_full?
     end
     id = statuses.map do |invoice|
       sales_engine.merchants.find_by_id(invoice.merchant_id)
@@ -216,17 +216,9 @@ class SalesAnalyst
   end
 
   def merchants_with_only_one_item_registered_in_month(months_name)
-    result = []
     merchants_created_in_month = sales_engine.merchants.find_all_by_month_created(months_name)
-    merchants_created_in_month.each do |merchant|
-      merchant_items_hash = @items[merchant.id].group_by do |item|
-        item.created_at.strftime("%B")
-      end
-      if merchant_items_hash[months_name].nil? == false && merchant_items_hash[months_name].count == 1
-        result << merchant
-      end
-      # binding.pry
-      result
+    merchants_created_in_month.find_all do |merchant|
+      merchant.items.length == 1
     end
   end
 
@@ -241,24 +233,55 @@ class SalesAnalyst
   end
 
   def most_sold_item_for_merchant(merchant_id)
-    result = Hash.new([])
-    items[merchant_id].each do |item|
-      total_quantity = sales_engine.invoice_items.find_all_by_item_id(item.id).map do |invoice_item|
-        # binding.pry
-        if sales_engine.invoices.find_by_id(invoice_item.invoice_id).is_paid_in_full?
-          invoice_item.quantity
-        else
-          0
-        end
-      end.reduce(:+)
-      result[total_quantity] << item
-
-      end
-      # binding.pry
-    result[result.keys.sort[-1]]
+    our_merchant = sales_engine.merchants.all.find do |merchant|
+      merchant.id == merchant_id
+    end
+   paid_invoices = our_merchant.invoices.find_all do |invoice|
+      invoice.is_paid_in_full?
+    end
+   paid_invoice_items = paid_invoices.flat_map do |invoice|
+      invoice.invoice_items
+    end
+   items = paid_invoice_items.group_by do |item|
+      item.item_id
+    end
+   reduced = Hash.new{0}
+   items.each do |key, value|
+      reduced[key] = value.reduce(0){ |total, sumtin| total += sumtin.quantity}
+    end
+   max = reduced.values.max
+   almost_done = reduced.select do |key,value|
+      key if value == max
+    end
+   almost_done.keys.map do |key|
+     sales_engine.items.all.find {|item| item.id == key}
+    end
   end
 
   def best_item_for_merchant(merchant_id)
-    #returns an item instance by revenue generated
+    our_merchant = sales_engine.merchants.all.find do |merchant|
+      merchant.id == merchant_id
+    end
+    paid_invoices = our_merchant.invoices.find_all do |invoice|
+      invoice.is_paid_in_full?
+    end
+    paid_invoice_items = paid_invoices.flat_map do |invoice|
+      invoice.invoice_items
+    end
+    items = paid_invoice_items.group_by do |item|
+      item.item_id
+    end
+    reduced = Hash.new{0}
+    items.each do |key, value|
+      reduced[key] = value.reduce(0){ |total, sumtin| total += sumtin.quantity * sumtin.unit_price }
+    end
+    max = reduced.values.max
+    almost_done = reduced.select do |key,value|
+      key if value == max
+    end
+    sales_engine.items.all.find do |item|
+      almost_done.keys.first == item.id
+      # sales_engine.items.all.find {|item| item.id == key}
+    end
   end
 end

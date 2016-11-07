@@ -157,16 +157,23 @@ class SalesAnalystTest < Minitest::Test
   #   assert_equal Array, result.class
   # end
 
-  def test_it_can_return_merchants_with_one_item_in_a_month
-    result = sa.merchants_with_only_one_item
-    assert_equal Array, result.class
-    assert_equal Merchant, result[0].class
-  end
+  # def test_it_can_return_merchants_with_one_item_in_a_month
+  #   result = sa.merchants_with_only_one_item
+  #   assert_equal Array, result.class
+  #   assert_equal Merchant, result[0].class
+  # end
+  #
+  # def test_it_can_find_months_with_only_one_item_sold
+  #   result = sa.merchants_with_only_one_item_registered_in_month("November")
+  #   assert_equal Array, result.class
+  #   assert_equal 0, result.count
+  # end
 
-  def test_it_can_find_months_with_only_one_item_sold
-    result = sa.merchants_with_only_one_item_registered_in_month("November")
+  def test_most_sold_item_for_merchant
+    result = sa.most_sold_item_for_merchant(12334189)
     assert_equal Array, result.class
-    assert_equal 0, result.count
+    assert_equal Item, result[0].class
+    assert_equal 263524984, result[0].id
   end
 
   # def test_it_can_find_revenue_by_merchant

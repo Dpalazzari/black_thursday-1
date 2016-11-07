@@ -241,7 +241,21 @@ class SalesAnalyst
   end
 
   def most_sold_item_for_merchant(merchant_id)
-    #returns array of one item instance inside, unless there is a tie of multiple items
+    result = Hash.new([])
+    items[merchant_id].each do |item|
+      total_quantity = sales_engine.invoice_items.find_all_by_item_id(item.id).map do |invoice_item|
+        # binding.pry
+        if sales_engine.invoices.find_by_id(invoice_item.invoice_id).is_paid_in_full?
+          invoice_item.quantity
+        else
+          0
+        end
+      end.reduce(:+)
+      result[total_quantity] << item
+
+      end
+      # binding.pry
+    result[result.keys.sort[-1]]
   end
 
   def best_item_for_merchant(merchant_id)

@@ -19,7 +19,9 @@ class MerchantRepository
 
   def load_all
     csv.each do |line|
-      all << Merchant.new({:id => line[:id].to_i, :name => line[:name]}, self)
+      all << Merchant.new({:id => line[:id].to_i, :name => line[:name],
+                          :created_at => line[:created_at],
+                          :updated_at => line[:updated_at]}, self)
     end
     all
   end
@@ -37,6 +39,12 @@ class MerchantRepository
   def find_all_by_name(name_frag)
     all.find_all do |merchant|
       merchant.name.upcase.include?(name_frag.upcase)
+    end
+  end
+
+  def find_all_by_month_created(date)
+    all.find_all do |merchant|
+      merchant.created_at.strftime("%B").upcase == date.upcase
     end
   end
 

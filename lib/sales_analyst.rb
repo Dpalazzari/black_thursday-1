@@ -182,24 +182,31 @@ class SalesAnalyst
     revenue.compact.reduce(:+)
   end
 
-  # def top_revenue_earners(x=20)
-  #   #gives top 20 merchants
-  #   thing = []
-  #   invoices.map do |merchant_id, values|
-  #     thing << [merchant_id, values.inject(0) do |sum, invoice_instance|
-  #       sum += invoice_instance.total.to_f
-  #     end]
-  #   end
-  #   merchants = thing.sort_by(&:last).reverse[0..(x-1)]
-  #   top = merchants.map do |merchant|
-  #     sales_engine.merchants.find_by_id(merchant[0])
-  #   end
-  #   top
-  #   # binding.pry
-  # end
+  def top_revenue_earners(x=20)
+    merchants_ranked_by_revenue[0..(x-1)]
+  end
+
+  def merchants_ranked_by_revenue
+    thing = []
+    invoices.map do |merchant_id, values|
+      thing << [merchant_id, values.inject(0) do |sum, invoice_instance|
+        sum += invoice_instance.total.to_f
+      end]
+    end
+    merchants = thing.sort_by(&:last).reverse
+    top = merchants.map do |merchant|
+      sales_engine.merchants.find_by_id(merchant[0])
+    end
+    top
+  end
 
   def merchants_with_pending_invoices
-    #returns an array of merchants with pending status's
+    statuses = sales_engine.invoices.all.find_all do |invoice|
+      invoice.status == :pending
+    end
+    id = statuses.map do |invoice|
+      sales_engine.merchants.find_by_id(invoice.merchant_id)
+    end.uniq
   end
 
   def merchants_with_only_one_item
@@ -209,16 +216,27 @@ class SalesAnalyst
   end
 
   def merchants_with_only_one_item_registered_in_month(months_name)
-    #returns an array of merchants
-    sales_engine.find_all_invoices_by_merchant_id
-    merchants_with_.group_by do |merchant|
-      merchant.created_at.strftime("%B").upcase == months_name.upcase
+    result = []
+    merchants_created_in_month = sales_engine.merchants.find_all_by_month_created(months_name)
+    merchants_created_in_month.each do |merchant|
+      merchant_items_hash = @items[merchant.id].group_by do |item|
+        item.created_at.strftime("%B")
+      end
+      if merchant_items_hash[months_name].nil? == false && merchant_items_hash[months_name].count == 1
+        result << merchant
+      end
+      # binding.pry
+      result
     end
   end
 
   def revenue_by_merchant(merchant_id)
     invoices[merchant_id].inject(0) do |sum , invoice_instance|
-      sum += invoice_instance.total
+      if invoice_instance.is_paid_in_full?
+        return sum += invoice_instance.total
+      else
+        sum += 0
+      end
     end
   end
 

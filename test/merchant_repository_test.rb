@@ -68,6 +68,12 @@ class MerchantRepositoryTest < Minitest::Test
     assert_equal "Shopin1902", result.last.name
   end
 
+  def test_it_can_find_all_by_date_created_at
+    merchant_repository.all
+    result = merchant_repository.find_all_by_month_created("December")
+    assert_equal Time, result[0].created_at.class
+  end
+
   def test_merchant_can_ask_se_for_items
     parent = Minitest::Mock.new
     merchants = MerchantRepository.new('fixture/merchants_fixture.csv', parent)

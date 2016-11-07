@@ -8,7 +8,9 @@ class MerchantTest < Minitest::Test
 
   def setup
     @merchant = Merchant.new({:id => 5,
-                              :name => "Turing School"})
+                              :name => "Turing School",
+                              :created_at => "2010-12-10",
+                              :updated_at => "2011-12-04"})
   end
 
   def test_it_exists
@@ -24,6 +26,16 @@ class MerchantTest < Minitest::Test
     assert_equal 5, merchant.id
   end
 
+  def test_it_outputs_the_correct_time_created_at
+    assert merchant.created_at
+    assert_equal Time, merchant.created_at.class
+  end
+
+  def test_it_outputs_the_correct_time_updated_at
+    assert merchant.updated_at
+    assert_equal Time, merchant.updated_at.class
+  end
+
   def test_id_is_integer
     assert_equal Fixnum, merchant.id.class
   end
@@ -35,7 +47,10 @@ class MerchantTest < Minitest::Test
 
   def test_merchant_can_ask_mr_for_invoices
     parent = Minitest::Mock.new
-    merchant = Merchant.new({:id => 5, :name => "Turing School"}, parent)
+    merchant = Merchant.new({:id => 5,
+                            :name => "Turing School",
+                            :created_at => "2010-12-10",
+                            :updated_at => "2011-12-04"}, parent)
     parent.expect(:find_all_invoices_by_merchant_id, nil, [merchant.id])
     merchant.invoices
     assert parent.verify
@@ -43,7 +58,10 @@ class MerchantTest < Minitest::Test
 
   def test_merchant_can_ask_mr_for_items
     parent = Minitest::Mock.new
-    merchant = Merchant.new({:id => 5, :name => "Turing School"}, parent)
+    merchant = Merchant.new({:id => 5,
+                            :name => "Turing School",
+                            :created_at => "2010-12-10",
+                            :updated_at => "2011-12-04"}, parent)
     parent.expect(:find_all_items_by_merchant_id, nil, [merchant.id])
     merchant.items
     assert parent.verify
@@ -51,7 +69,10 @@ class MerchantTest < Minitest::Test
 
   def test_merchant_can_ask_mr_for_customers
     parent = Minitest::Mock.new
-    merchant = Merchant.new({:id => 5, :name => "Turing School"}, parent)
+    merchant = Merchant.new({:id => 5,
+                            :name => "Turing School",
+                            :created_at => "2010-12-10",
+                            :updated_at => "2011-12-04"}, parent)
     parent.expect(:find_customers_by_id, nil, [merchant.id])
     merchant.customers
     assert parent.verify

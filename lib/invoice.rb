@@ -45,10 +45,10 @@ class Invoice
     result = matching_transactions.map do |transaction|
       transaction.result == "success"
     end
-    if result.include?(false) || result.count == 0
-      return false
-    else
+    if result.include?(true)
       return true
+    else
+      return false
     end
   end
 
@@ -61,8 +61,6 @@ class Invoice
       invoice_items.compact.inject(0) do |result, element|
         result += element.unit_price * element.quantity
       end
-    else
-      return 0
     end
   end
 end

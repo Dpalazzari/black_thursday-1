@@ -204,7 +204,7 @@ class SalesAnalyst
     statuses = sales_engine.invoices.all.find_all do |invoice|
       !invoice.is_paid_in_full?
     end
-    id = statuses.map do |invoice|
+    statuses.map do |invoice|
       sales_engine.merchants.find_by_id(invoice.merchant_id)
     end.uniq
   end
@@ -223,12 +223,14 @@ class SalesAnalyst
   end
 
   def revenue_by_merchant(merchant_id)
-    invoices[merchant_id].inject(0) do |sum , invoice_instance|
+    if invoices[merchant_id]
+      invoices[merchant_id].inject(0) do |sum , invoice_instance|
       if invoice_instance.is_paid_in_full?
         return sum += invoice_instance.total
       else
         sum += 0
       end
+    end
     end
   end
 

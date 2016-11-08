@@ -9,12 +9,12 @@ class TransactionRepositoryTest < Minitest::Test
 
   def setup
     se = SalesEngine.from_csv({
-              :items         => 'fixture/items_fixture_3.csv',
-              :merchants     => 'fixture/merchants_fixture.csv',
-              :invoices      => 'fixture/invoices_fixtures.csv',
-              :invoice_items => 'fixture/invoice_item_fixture.csv',
-              :transactions  => 'fixture/transaction_fixture.csv',
-              :customers     => 'data/customers.csv'})
+      :items         => 'data_min/items.csv',
+      :merchants     => 'data_min/merchants.csv',
+      :invoices      => 'data_min/invoices.csv',
+      :invoice_items => 'data_min/invoice_items.csv',
+      :transactions  => 'data_min/transactions.csv',
+      :customers     => 'data_min/customers.csv'})
     @transaction_repository = se.transactions
   end
 
@@ -34,7 +34,7 @@ class TransactionRepositoryTest < Minitest::Test
 
   def test_all
     output = transaction_repository.all.count
-    assert_equal 999, output
+    assert_equal 67, output
   end
 
   def test_it_puts_the_id_in_the_all_array
@@ -44,7 +44,7 @@ class TransactionRepositoryTest < Minitest::Test
 
   def test_it_puts_the_invoice_id_in_the_all_array
     output = transaction_repository.all[0].invoice_id
-    assert_equal 2179, output
+    assert_equal 30, output
   end
 
   def test_it_puts_the_credit_card_info_in_the_all_array
@@ -64,22 +64,22 @@ class TransactionRepositoryTest < Minitest::Test
   def test_it_can_find_a_transaction_by_id
     output = transaction_repository.find_by_id(1)
     assert_equal Transaction, output.class
-    assert_equal 2179, output.invoice_id
+    assert_equal 30, output.invoice_id
     assert_equal "success", output.result
   end
 
   def test_it_cam_find_a_transaction_by_invoice_id
-    output = transaction_repository.find_all_by_invoice_id(2179)
+    output = transaction_repository.find_all_by_invoice_id(1)
     assert_equal Array, output.class
-    assert_equal 1, output[0].id
-    assert_equal 4068631943231473, output[0].credit_card_number
+    assert_equal 30, output[0].id
+    assert_equal 4619850044750256, output[0].credit_card_number
   end
 
   def test_it_can_find_a_transaction_by_credit_card_number
     output = transaction_repository.find_all_by_credit_card_number(4068631943231473)
     assert_equal Array, output.class
     assert_equal 1, output[0].id
-    assert_equal 2179, output[0].invoice_id
+    assert_equal 30, output[0].invoice_id
     assert_equal Time, output[0].created_at.class
     assert_equal Time, output[0].updated_at.class
   end
@@ -88,7 +88,7 @@ class TransactionRepositoryTest < Minitest::Test
     output = transaction_repository.find_all_by_result("success")
     assert_equal Array, output.class
     assert_equal 1, output[0].id
-    assert_equal 2179, output[0].invoice_id
+    assert_equal 30, output[0].invoice_id
     assert_equal Time, output[0].created_at.class
     assert_equal Time, output[0].updated_at.class
   end

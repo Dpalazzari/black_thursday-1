@@ -8,12 +8,12 @@ class InvoiceItemRepositoryTest < Minitest::Test
 
   def setup
     se = SalesEngine.from_csv({
-              :items         => 'fixture/items_fixture_3.csv',
-              :merchants     => 'fixture/merchants_fixture.csv',
-              :invoices      => 'fixture/invoices_fixtures.csv',
-              :invoice_items => 'fixture/invoice_item_fixture.csv',
-              :transactions  => 'fixture/transaction_fixture.csv',
-              :customers     => 'data/customers.csv'})
+      :items         => 'data_min/items.csv',
+      :merchants     => 'data_min/merchants.csv',
+      :invoices      => 'data_min/invoices.csv',
+      :invoice_items => 'data_min/invoice_items.csv',
+      :transactions  => 'data_min/transactions.csv',
+      :customers     => 'data_min/customers.csv'})
     @invoice_items = se.invoice_items
   end
 
@@ -22,7 +22,7 @@ class InvoiceItemRepositoryTest < Minitest::Test
   end
 
   def test_find_by_id_returns_nil_when_no_invoice
-    result = invoice_items.find_by_id(1000)
+    result = invoice_items.find_by_id(3000)
     assert_equal nil, result
   end
 
@@ -33,24 +33,24 @@ class InvoiceItemRepositoryTest < Minitest::Test
   end
 
   def test_find_all_by_item_id_returns_invoice_item
-    result = invoice_items.find_all_by_item_id(263454779)
+    result = invoice_items.find_all_by_item_id(6)
     assert_equal Array, result.class
     assert_equal InvoiceItem, result[0].class
-    assert_equal 263454779, result.first.item_id
+    assert_equal 6, result.first.item_id
   end
 
   def test_find_all_by_invoice_id_returns_invoice_item
     result = invoice_items.find_all_by_invoice_id(2)
     assert_equal Array, result.class
     assert_equal InvoiceItem, result[0].class
-    assert_equal 263529264, result.first.item_id
+    assert_equal 21, result.first.item_id
   end
 
   def test_invoice_items_can_ask_for_items
     parent = Minitest::Mock.new
-    invoice_items = InvoiceItemRepository.new('fixture/invoice_item_fixture.csv', parent)
-    parent.expect(:find_items_by_item_id, nil, [263400013])
-    invoice_items.find_items(263400013)
+    invoice_items = InvoiceItemRepository.new('data_min/invoice_items.csv', parent)
+    parent.expect(:find_items_by_item_id, nil, [2])
+    invoice_items.find_items(2)
     assert parent.verify
   end
 end

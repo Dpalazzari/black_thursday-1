@@ -9,12 +9,12 @@ class SalesAnalystTest < Minitest::Test
 
   def setup
     @se = SalesEngine.from_csv({
-      :items         => 'data/items.csv',
-      :merchants     => 'data/merchants.csv',
-      :invoices      => 'data/invoices.csv',
-      :invoice_items => 'data/invoice_items.csv',
-      :transactions  => 'data/transactions.csv',
-      :customers     => 'data/customers.csv'})
+      :items         => 'data_min/items.csv',
+      :merchants     => 'data_min/merchants.csv',
+      :invoices      => 'data_min/invoices.csv',
+      :invoice_items => 'data_min/invoice_items.csv',
+      :transactions  => 'data_min/transactions.csv',
+      :customers     => 'data_min/customers.csv'})
   @sa = SalesAnalyst.new(@se)
   end
 
@@ -49,37 +49,37 @@ class SalesAnalystTest < Minitest::Test
 
   def test_average_items_per_merchant
     result = sa.average_items_per_merchant
-    assert_equal 2.88, result
+    assert_equal 2.16, result
     assert_equal Float, result.class
   end
 
   def test_average_items_per_merchant_std_dev
     result = sa.average_items_per_merchant_standard_deviation
-    assert_equal 3.26, result
+    assert_equal 1.89, result
     assert_equal Float, result.class
   end
 
   def test_it_finds_merchants_with_high_item_counts
     result = sa.merchants_with_high_item_count
-    assert_equal "Keckenbauer", result.first.name
+    assert_equal "Shopin1901", result.first.name
   end
 
   def test_average_item_price_for_merchant_returns_price
-    result = sa.average_item_price_for_merchant(12334105)
+    result = sa.average_item_price_for_merchant(2)
     assert_equal BigDecimal, result.class
-    assert_equal 16.66 , result.to_f
+    assert_equal 15.5 , result.to_f
   end
 
   def test_average_average_price_per_merchant
     result = sa.average_average_price_per_merchant
     assert_equal BigDecimal, result.class
-    assert_equal 350.29, result.to_f
+    assert_equal 142.4, result.to_f
   end
 
   def test_item_standard_deviation
     result = sa.get_item_standard_deviation
     assert_equal Float, result.class
-    assert_equal 2900.99, result.round(2)
+    assert_equal 674.46, result.round(2)
   end
 
   def test_golden_items_returns_array
@@ -95,54 +95,54 @@ class SalesAnalystTest < Minitest::Test
 
   def test_it_finds_average_invoices_per_merchant
     result = sa.average_invoices_per_merchant
-    assert_equal 10.49, result
+    assert_equal 0.32, result
     assert_equal Float, result.class
   end
 
   def test_average_invoices_standard_deviation
     r = sa.average_invoices_per_merchant_standard_deviation
-    assert_equal 3.29, r
+    assert_equal 0.59, r
   end
 
   def test_it_can_find_the_top_merchants_by_invoice_count
     result = sa.top_merchants_by_invoice_count
     assert_equal Array, result.class
-    assert_equal 12, result.count
+    assert_equal 2, result.count
   end
 
   def test_it_can_find_the_bottom_merchants_by_invoice_count
     result = sa.top_merchants_by_invoice_count
-    assert_equal 12, result.count
+    assert_equal 2, result.count
   end
 
   def test_it_can_tell_us_the_day_of_the_week_from_date
     result = sa.top_days_by_invoice_count
-    assert_equal ["Wednesday"], result
+    assert_equal ["Friday"], result
   end
 
   def test_invoice_status_matches_status
     result = sa.invoice_status(:pending)
     assert_equal Float, result.class
-    assert_equal 29.55, result
+    assert_equal 60.0, result
   end
 
   def test_it_finds_total_revenue_by_date
-    date = Time.parse("2012-02-26")
+    date = Time.parse("2009-02-07")
     result = sa.total_revenue_by_date(date)
     assert_equal BigDecimal, result.class
-    assert_equal 11668.87, result.to_f
+    assert_equal 271.54, result.to_f
   end
 
   def test_it_can_find_the_top_merchants_by_revenue
     result = sa.top_revenue_earners(10)
     assert_equal Array, result.class
-    assert_equal "HoggardWoodworks", result.first.name
-    assert_equal 10, result.count
+    assert_equal "Urcase17", result.first.name
+    assert_equal 8, result.count
   end
 
   def test_it_ranks_all_merchants_by_revenue
     result = sa.merchants_ranked_by_revenue
-    assert_equal 475, result.count
+    assert_equal 8, result.count
   end
 
   def test_it_can_find_all_pending_merchant_invoices
@@ -153,7 +153,7 @@ class SalesAnalystTest < Minitest::Test
 
   def test_it_can_find_merchants_with_only_one_item
     result = sa.merchants_with_only_one_item
-    assert_equal 243, result.count
+    assert_equal 3, result.count
     assert_equal Array, result.class
   end
 
@@ -164,27 +164,27 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_it_can_find_months_with_only_one_item_sold
-    result = sa.merchants_with_only_one_item_registered_in_month("November")
+    result = sa.merchants_with_only_one_item_registered_in_month("April")
     assert_equal Array, result.class
-    assert_equal 23, result.count
+    assert_equal 1, result.count
   end
 
   def test_most_sold_item_for_merchant
-    result = sa.most_sold_item_for_merchant(12334189)
+    result = sa.most_sold_item_for_merchant(1)
     assert_equal Array, result.class
     assert_equal Item, result[0].class
-    assert_equal 263524984, result[0].id
+    assert_equal 45, result[0].id
   end
 
   def test_best_sold_item_for_merchant
-    result = sa.best_item_for_merchant(12334189)
+    result = sa.best_item_for_merchant(1)
     assert_equal Item, result.class
-    assert_equal 263516130, result.id
+    assert_equal 45, result.id
   end
 
   def test_it_can_find_revenue_by_merchant
-    result = sa.revenue_by_merchant(12335747)
-    assert_equal 16839.35, result.to_f.round(2)
+    result = sa.revenue_by_merchant(1)
+    assert_equal 270.74, result.to_f.round(2)
     assert_equal BigDecimal, result.class
   end
 end

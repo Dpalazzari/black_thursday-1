@@ -7,7 +7,7 @@ class MerchantRepository
               :parent
 
   def initialize(path, sales_engine)
-    @all = []
+    @all    = []
     @parent = sales_engine
     csv_load(path)
     load_all
@@ -19,11 +19,12 @@ class MerchantRepository
 
   def load_all
     csv.each do |line|
-      all << Merchant.new({:id => line[:id].to_i, :name => line[:name],
-                          :created_at => line[:created_at],
-                          :updated_at => line[:updated_at]}, self)
+      all << Merchant.new({:id         => line[:id].to_i,
+                           :name       => line[:name],
+                           :created_at => line[:created_at],
+                           :updated_at => line[:updated_at]},
+                           self)
     end
-    all
   end
 
   def find_by_id(id)

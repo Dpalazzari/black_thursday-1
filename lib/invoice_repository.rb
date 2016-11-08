@@ -7,7 +7,7 @@ class InvoiceRepository
 
   def initialize(path, sales_engine = nil)
     @parent = sales_engine
-    @all = []
+    @all    = []
     csv_path(path)
     load_all
   end
@@ -17,10 +17,7 @@ class InvoiceRepository
   end
 
   def load_all
-    csv.each do |line|
-      @all << Invoice.new(line, self)
-    end
-    all
+    csv.each {|line| @all << Invoice.new(line, self)}
   end
 
   def find_by_id(id)

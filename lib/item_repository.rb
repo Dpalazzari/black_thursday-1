@@ -1,4 +1,3 @@
-require 'pry'
 require 'csv'
 require_relative '../lib/item'
 
@@ -20,10 +19,7 @@ class ItemRepository
   end
 
   def load_all
-    @all = csv.collect do |line|
-      Item.new(line, self)
-    end
-    all
+    @all = csv.collect { |line| Item.new(line, self)}
   end
 
   def find_by_id(id)
@@ -43,9 +39,7 @@ class ItemRepository
   end
 
   def find_all_by_price(price)
-    all.find_all do |item|
-      item.unit_price == price
-    end
+    all.find_all { |item| item.unit_price == price}
   end
 
   def find_all_by_price_in_range(price_range)
@@ -55,9 +49,7 @@ class ItemRepository
   end
 
   def find_all_by_merchant_id(id)
-    all.find_all do |item|
-      item.merchant_id == id
-    end
+    all.find_all { |item| item.merchant_id == id}
   end
 
   def find_merchant(id)

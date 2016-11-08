@@ -1,4 +1,3 @@
-require 'pry'
 require 'csv'
 require_relative '../lib/invoice_item'
 
@@ -9,7 +8,7 @@ class InvoiceItemRepository
               :parent
 
   def initialize(path, sales_engine)
-    @all = []
+    @all    = []
     @parent = sales_engine
     csv_load(path)
     load_all
@@ -20,10 +19,7 @@ class InvoiceItemRepository
   end
 
   def load_all
-    @all = csv.collect do |line|
-      InvoiceItem.new(line, self)
-    end
-    all
+    @all = csv.collect {|line| InvoiceItem.new(line, self)}
   end
 
   def find_by_id(id)
@@ -31,15 +27,11 @@ class InvoiceItemRepository
   end
 
   def find_all_by_item_id(id)
-    all.find_all do |invoice_item|
-      invoice_item.item_id == id
-    end
+    all.find_all { |invoice_item| invoice_item.item_id == id }
   end
 
   def find_all_by_invoice_id(id)
-    all.find_all do |invoice_item|
-      invoice_item.invoice_id == id
-    end
+    all.find_all {|invoice_item| invoice_item.invoice_id == id}
   end
 
   def find_items(item_id)

@@ -111,8 +111,9 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_it_can_find_the_bottom_merchants_by_invoice_count
-    result = sa.top_merchants_by_invoice_count
-    assert_equal 2, result.count
+    result = sa.bottom_merchants_by_invoice_count
+    assert_equal Array, result.class
+    assert_equal 0, result.count
   end
 
   def test_it_can_tell_us_the_day_of_the_week_from_date

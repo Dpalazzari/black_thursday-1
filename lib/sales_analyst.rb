@@ -1,5 +1,6 @@
 require 'pry'
 require 'time'
+require_relative 'calculator'
 
 class SalesAnalyst
   attr_reader :sales_engine,
@@ -221,58 +222,51 @@ class SalesAnalyst
   end
 
   def most_sold_item_for_merchant(merchant_id)
-  #  quantities = Hash.new{0}
-   find_purchased_items_by_merchant_id(merchant_id).values.map do |item|
-      item.reduce(0) do |total, invoice_item|
-        total += invoice_item.quantity
-      end
-    end
-    binding.pry
-    find_items_by_item_ids(find_top_items(quantities))
+    invoiced_items = find_invoiced_items_for_merchant(merchant_id)
+    quantities = find_item_quantity(invoiced_items)
+    best_item_ids = find_most_sold_items(quantities)
+    find_items_by_ids(best_item_ids)
   end
 
-  def find_purchased_items_by_merchant_id(merchant_id)
+  def find_most_sold_items(array)
+    max_quantity = array.sort_by(&:last)[-1][1]
+    array.map do |sub_array|
+      sub_array[0] if sub_array[1] == max_quantity
+    end.compact
+  end
+
+  def best_item_for_merchant(merchant_id)
+    invoiced_items = find_invoiced_items_for_merchant(merchant_id)
+    revenues = find_item_revenue(invoiced_items)
+    best_item_id = revenues.sort_by(&:last)[-1][0]
+    find_item_by_id(best_item_id)
+  end
+
+  def find_invoiced_items_for_merchant(merchant_id)
     paid_invoice_items = invoices[merchant_id].map do |invoice|
       invoice.invoice_items if invoice.is_paid_in_full?
-    end.compact.flatten
-    paid_invoice_items.group_by { |item| item.item_id }
-  end
-
-  def find_top_items(quantities)
-    quantities.select do |key,value|
-      key if value == quantities.values.max
-    end
-  end
-
-  def find_items_by_item_ids(array)
-    array.map do |id|
-      sales_engine.items.find_by_id(id)
     end.flatten
   end
 
-  # def best_item_for_merchant(merchant_id)
-  #   our_merchant = sales_engine.merchants.all.find do |merchant|
-  #     merchant.id == merchant_id
-  #   end
-  #   paid_invoice_items = our_merchant.invoices.find_all do |invoice|
-  #     invoice.is_paid_in_full?
-  #   end
-  #   paid_invoice_items = paid_invoice_items.flat_map do |invoice|
-  #     invoice.invoice_items
-  #   end
-  #   items = paid_invoice_items.group_by do |item|
-  #     item.item_id
-  #   end
-  #   reduced = Hash.new{0}
-  #   items.each do |key, value|
-  #     reduced[key] = value.reduce(0){ |total, sumtin| total += sumtin.quantity * sumtin.unit_price }
-  #   end
-  #   max = reduced.values.max
-  #   almost_done = reduced.select do |key,value|
-  #     key if value == max
-  #   end
-  #   sales_engine.items.all.find do |item|
-  #     almost_done.keys.first == item.id
-  #   end
-  # end
+  def find_item_revenue(invoice_items)
+    invoice_items.compact.map do |invoice_item|
+      result = invoice_item.quantity * invoice_item.unit_price
+      [invoice_item.item_id, result]
+    end
+  end
+
+  def find_item_quantity(invoice_items)
+    invoice_items.compact.map do |invoice_item|
+      result = invoice_item.quantity
+      [invoice_item.item_id, result]
+    end
+  end
+
+  def find_item_by_id(id)
+    sales_engine.items.find_by_id(id)
+  end
+
+  def find_items_by_ids(array)
+    array.map { |id| sales_engine.items.find_by_id(id) }
+  end
 end

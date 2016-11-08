@@ -177,7 +177,6 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_best_sold_item_for_merchant
-    skip
     result = sa.best_item_for_merchant(1)
     assert_equal Item, result.class
     assert_equal 45, result.id

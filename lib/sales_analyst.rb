@@ -1,8 +1,21 @@
 require 'pry'
 require 'time'
-require_relative 'calculator'
+
+module Calculator
+  def average(array)
+    array.inject{ |sum, element| sum + element }.to_f / array.count
+  end
+
+  def find_standard_deviation(array)
+    mean        = average(array)
+    sum_squares = array.inject(0) { |sum, element| sum + (mean - element)**2 }
+    Math.sqrt(sum_squares / (array.length - 1))
+  end
+end
 
 class SalesAnalyst
+  include Calculator
+
   attr_reader :sales_engine,
               :items,
               :merchants,
@@ -27,16 +40,6 @@ class SalesAnalyst
 
   def load_invoices
     sales_engine.load_invoices
-  end
-
-  def average(array)
-    array.inject{ |sum, element| sum + element }.to_f / array.count
-  end
-
-  def find_standard_deviation(array)
-    mean        = average(array)
-    sum_squares = array.inject(0) { |sum, element| sum + (mean - element)**2 }
-    Math.sqrt(sum_squares / (array.length - 1))
   end
 
   def average_items_per_merchant
@@ -207,7 +210,9 @@ class SalesAnalyst
   end
 
   def merchants_with_only_one_item_registered_in_month(months_name)
-    merchants_created_in_month = sales_engine.merchants.find_all_by_month_created(months_name)
+    merchants_created_in_month = sales_engine.
+                                 merchants.
+                                 find_all_by_month_created(months_name)
     merchants_created_in_month.find_all do |merchant|
       merchant.items.length == 1
     end

@@ -1,4 +1,3 @@
-require 'pry'
 
 class Invoice
 
@@ -42,13 +41,14 @@ class Invoice
 
   def is_paid_in_full?
     matching_transactions = @parent.find_transactions(@id)
-    result = matching_transactions.map do |transaction|
+    result = find_successful_transactions(matching_transactions)
+    return true if result.include?(true)
+    return false
+  end
+
+  def find_successful_transactions(matching_transactions)
+    matching_transactions.map do |transaction|
       transaction.result == "success"
-    end
-    if result.include?(true)
-      return true
-    else
-      return false
     end
   end
 
@@ -57,10 +57,13 @@ class Invoice
   end
 
   def total
-    if is_paid_in_full?
-      invoice_items.compact.inject(0) do |result, element|
-        result += element.unit_price * element.quantity
-      end
+    price_times_quantity if is_paid_in_full?
+  end
+
+  def price_times_quantity
+    invoice_items.compact.inject(0) do |result, element|
+      result += element.unit_price * element.quantity
     end
   end
+
 end

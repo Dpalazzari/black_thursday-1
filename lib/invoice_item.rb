@@ -1,4 +1,3 @@
-require 'pry'
 require 'bigdecimal'
 require 'time'
 
@@ -24,12 +23,8 @@ class InvoiceItem
   end
 
   def find_unit_price(price)
-    if unit_price == ""
-      unit_price = BigDecimal.new(0)
-    else
-      unit_price = BigDecimal.new(price) / 100
-    end
-    return unit_price
+    unit_price = BigDecimal.new(0) if unit_price == ""
+    unit_price = BigDecimal.new(price) / 100
   end
 
   def unit_price_to_dollars(unit_price)

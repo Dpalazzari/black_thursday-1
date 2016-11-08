@@ -19,10 +19,7 @@ class CustomerRepository
   end
 
   def load_all
-    @all = csv.collect do |line|
-      Customer.new(line, self)
-    end
-    all
+    @all = csv.collect {|line| Customer.new(line, self)}
   end
 
   def find_by_id(id)

@@ -1,4 +1,3 @@
-require 'pry'
 require 'csv'
 require_relative '../lib/merchant_repository'
 require_relative '../lib/item_repository'
@@ -29,9 +28,7 @@ class SalesEngine
   end
 
   def load_items
-    items.all.group_by do |item_instance|
-      item_instance.merchant_id
-    end
+    items.all.group_by { |item_instance| item_instance.merchant_id}
   end
 
   def load_invoices
@@ -39,12 +36,6 @@ class SalesEngine
       invoice_instance.merchant_id
     end
   end
-
-  # def load_transactions
-  #   transactions.all.group_by do |transactions_instance|
-  #     transactions_instance.updated_at
-  #   end
-  # end
 
   def find_all_items_by_merchant_id(id)
     @items.find_all_by_merchant_id(id)
@@ -60,13 +51,9 @@ class SalesEngine
 
   def find_items_by_invoice_id(id)
     items = @invoice_items.find_all_by_invoice_id(id)
-    item_ids = items.map do |invoice_item|
-      invoice_item.item_id
+    items.map do |invoice_item|
+      @items.find_by_id(invoice_item.item_id)
     end
-    array = item_ids.map do |item_id|
-      @items.find_by_id(item_id)
-    end
-    array
   end
 
   def find_invoice_items_by_invoice_id(id)
@@ -91,24 +78,16 @@ class SalesEngine
 
   def find_customers_by_merchant_id(id)
     matching_invoices = @invoices.find_all_by_merchant_id(id)
-    matching_customers = matching_invoices.map do |invoice|
-      invoice.customer_id
-    end
-    result = matching_customers.map do |customer_id|
-    @customers.find_by_id(customer_id)
-    end
-    result.uniq
+    matching_invoices.map do |invoice|
+      @customers.find_by_id(invoice.customer_id)
+    end.uniq
   end
 
   def find_merchants_by_customer_id(id)
     matching_invoices = @invoices.find_all_by_customer_id(id)
-    matching_merchants = matching_invoices.map do |invoice|
-      invoice.merchant_id
-    end
-    result = matching_merchants.map do |merch_id|
-      @merchants.find_by_id(merch_id)
-    end
-    result.uniq.compact
+    matching_invoices.map do |invoice|
+      @merchants.find_by_id(invoice.merchant_id)
+    end.uniq.compact
   end
 
 end

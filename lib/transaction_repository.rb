@@ -8,7 +8,7 @@ class TransactionRepository
               :parent
 
   def initialize(path, sales_engine)
-    @all = []
+    @all    = []
     @parent = sales_engine
     csv_load(path)
     load_all

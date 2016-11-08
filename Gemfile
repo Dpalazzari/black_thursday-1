@@ -7,3 +7,4 @@ gem 'minitest'
 gem 'minitest/nyan_cat'
 gem 'pry'
 gem 'simplecov', :require => false, :group => :test
+# gem 'chronic'

@@ -7,12 +7,12 @@ class InvoiceRepositoryTest < Minitest::Test
   attr_reader :invoices
   def setup
     se = SalesEngine.from_csv({
-              :items         => 'fixture/items_fixture_3.csv',
-              :merchants     => 'fixture/merchants_fixture.csv',
-              :invoices      => 'fixture/invoices_fixtures.csv',
-              :invoice_items => 'fixture/invoice_item_fixture.csv',
-              :transactions  => 'fixture/transaction_fixture.csv',
-              :customers     => 'data/customers.csv'})
+      :items         => 'data_min/items.csv',
+      :merchants     => 'data_min/merchants.csv',
+      :invoices      => 'data_min/invoices.csv',
+      :invoice_items => 'data_min/invoice_items.csv',
+      :transactions  => 'data_min/transactions.csv',
+      :customers     => 'data_min/customers.csv'})
     @invoices = se.invoices
   end
 
@@ -40,7 +40,7 @@ class InvoiceRepositoryTest < Minitest::Test
     result = invoices.find_all_by_customer_id(10)
     assert_equal Array, result.class
     assert_equal 10, result[0].customer_id
-    assert_equal 8, result.length
+    assert_equal 1, result.length
   end
 
   def test_it_has_merchant_id_returns_empty_hash_if_empty
@@ -49,10 +49,10 @@ class InvoiceRepositoryTest < Minitest::Test
   end
 
   def test_find_all_by_merchant_id
-    result = invoices.find_all_by_merchant_id(12335938)
+    result = invoices.find_all_by_merchant_id(9)
     assert_equal Array, result.class
-    assert_equal 12335938, result[0].merchant_id
-    assert_equal 4, result.length
+    assert_equal 9, result[0].merchant_id
+    assert_equal 2, result.length
   end
 
   def test_find_all_by_status_gives_empty_array_if_empty
@@ -64,7 +64,7 @@ class InvoiceRepositoryTest < Minitest::Test
   def test_find_all_by_status_gives_correct_invoices
     result = invoices.find_all_by_status(:pending)
     assert_equal Array, result.class
-    assert_equal 310, result.count
+    assert_equal 6, result.count
   end
 
   def test_invoice_can_ask_for_merchant

@@ -8,12 +8,12 @@ class MerchantRepositoryTest < Minitest::Test
 
   def setup
     se = SalesEngine.from_csv({
-              :items         => 'fixture/items_fixture_3.csv',
-              :merchants     => 'fixture/merchants_fixture.csv',
-              :invoices      => 'fixture/invoices_fixtures.csv',
-              :invoice_items => 'fixture/invoice_item_fixture.csv',
-              :transactions  => 'fixture/transaction_fixture.csv',
-              :customers     => 'data/customers.csv'})
+      :items         => 'data_min/items.csv',
+      :merchants     => 'data_min/merchants.csv',
+      :invoices      => 'data_min/invoices.csv',
+      :invoice_items => 'data_min/invoice_items.csv',
+      :transactions  => 'data_min/transactions.csv',
+      :customers     => 'data_min/customers.csv'})
     @merchant_repository = se.merchants
   end
 
@@ -38,25 +38,25 @@ class MerchantRepositoryTest < Minitest::Test
 
   def test_csv_loader_loads_correctly
     result = merchant_repository.all[0].id
-    assert_equal 12334105, result
+    assert_equal 1, result
   end
 
   def test_find_by_id_finds_correct_pair_of_values
     merchant_repository.all
-    result = merchant_repository.find_by_id(12334105)
+    result = merchant_repository.find_by_id(1)
     assert_equal "Shopin1901", result.name
   end
 
   def test_find_by_id_returns_correct_format
     merchant_repository.all
-    result = merchant_repository.find_by_id(12334105)
+    result = merchant_repository.find_by_id(3)
     assert_equal Merchant, result.class
   end
 
   def test_find_by_name_finds_correct_pair_of_values
     merchant_repository.all
     result = merchant_repository.find_by_name("Shopin1901")
-    assert_equal 12334105, result.id
+    assert_equal 1, result.id
     assert_equal "Shopin1901", result.name
     assert_equal Merchant, result.class
   end
@@ -64,8 +64,8 @@ class MerchantRepositoryTest < Minitest::Test
   def test_find_all_by_name_returns_array_of_names
     merchant_repository.all
     result = merchant_repository.find_all_by_name("Shopin")
+    assert_equal Array, result.class
     assert_equal "Shopin1901", result.first.name
-    assert_equal "Shopin1902", result.last.name
   end
 
   def test_it_can_find_all_by_date_created_at

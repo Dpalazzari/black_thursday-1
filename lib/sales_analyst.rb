@@ -1,17 +1,5 @@
-require 'pry'
 require 'time'
-
-module Calculator
-  def average(array)
-    array.inject{ |sum, element| sum + element }.to_f / array.count
-  end
-
-  def find_standard_deviation(array)
-    mean        = average(array)
-    sum_squares = array.inject(0) { |sum, element| sum + (mean - element)**2 }
-    Math.sqrt(sum_squares / (array.length - 1))
-  end
-end
+require_relative 'calculator'
 
 class SalesAnalyst
   include Calculator
@@ -23,11 +11,11 @@ class SalesAnalyst
               :transactions
 
   def initialize(sales_engine)
-    @sales_engine = sales_engine
-    @items        = load_items
-    @merchants    = load_merchants
-    @invoices     = load_invoices
-    @transactions = sales_engine.transactions
+    @sales_engine ||= sales_engine
+    @items        ||= load_items
+    @merchants    ||= load_merchants
+    @invoices     ||= load_invoices
+    @transactions ||= sales_engine.transactions
   end
 
   def load_items

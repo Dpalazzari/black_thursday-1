@@ -133,7 +133,7 @@ class SalesAnalyst
   def find_threshold(array)
     std_dev   = find_standard_deviation(array)
     avg       = average(array)
-    threshold = (std_dev) + avg
+    (std_dev) + avg
   end
 
   def invoice_count_by_day
@@ -236,7 +236,7 @@ class SalesAnalyst
   end
 
   def find_invoiced_items_for_merchant(merchant_id)
-    paid_invoice_items = invoices[merchant_id].map do |invoice|
+    invoices[merchant_id].map do |invoice|
       invoice.invoice_items if invoice.is_paid_in_full?
     end.flatten
   end
